@@ -5,11 +5,10 @@ import loop from '@/assets/svg/control/loop.svg';
 import single from '@/assets/svg/control/single.svg';
 import shuffle from '@/assets/svg/control/shuffle.svg';
 
-import type {AudioTrack} from '@/api/interface'
+import type {AudioTrack, LyricLine} from '@/api/interface'
 import {parseBlob} from "music-metadata-browser";
-import {type LyricLine, parseLRC} from "@/utils/lyricParser.ts";
+import {parseLRC} from "@/utils/lyricParser.ts";
 import {getImageTopBottomColors} from "@/utils/color.ts";
-
 import {useUIStore} from "@/store/ui";
 
 const uiStore = useUIStore();

@@ -71,7 +71,7 @@ export const constRoutes = [
  * 放行白名单
  * 不需要认证 token
  */
-export const whiteList = ["/register"]
+export const whiteList = ["/"]
 
 /**
  * 校验是否在白名单内

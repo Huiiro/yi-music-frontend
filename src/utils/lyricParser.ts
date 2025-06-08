@@ -1,10 +1,9 @@
-// utils/lyricParser.ts
+import type {LyricLine} from "@/api/interface.ts";
 
-export interface LyricLine {
-    time: number; // 秒数
-    text: string;
-}
-
+/**
+ * 读取并处理歌词
+ * @param raw
+ */
 export function parseLRC(raw: string): LyricLine[] {
     const lines = raw
         .split(/\r?\n/)
@@ -24,7 +23,7 @@ export function parseLRC(raw: string): LyricLine[] {
             const time = min * 60 + sec + ms / 1000;
 
             const text = line.replace(timeReg, '').trim();
-            result.push({ time, text });
+            result.push({time, text});
         }
     }
 
@@ -32,7 +31,7 @@ export function parseLRC(raw: string): LyricLine[] {
 }
 
 /**
- * 根据当前播放时间获取当前行索引
+ * 根据当前播放时间获取当前歌词行索引
  */
 export function findCurrentLineIndex(lyrics: LyricLine[], currentTime: number): number {
     for (let i = lyrics.length - 1; i >= 0; i--) {

@@ -3,12 +3,14 @@ import {onMounted, onBeforeUnmount, ref} from 'vue';
 import {useAppStore} from '@/store/app';
 import {useSidebarStore} from "@/store/sidebar";
 
-const sidebarStore = useSidebarStore();
 const appStore = useAppStore();
+const sidebarStore = useSidebarStore();
 const isSmallScreen = ref(appStore.isSmallScreen);
 
-// 监听窗口宽度变化，动态切换侧边栏显示和按钮显示
-function onResize() {
+/**
+ * 监听窗口宽度变化，动态切换侧边栏显示和按钮显示
+ */
+const onResize = () => {
   appStore.updateScreenSize();
 
   const small = window.innerWidth < 768;
@@ -29,7 +31,6 @@ onMounted(() => {
   window.addEventListener('resize', onResize);
   onResize();
 
-  // 页面加载时，根据屏幕宽度初始化侧边栏状态
   if (isSmallScreen.value) {
     sidebarStore.toggleVisibility(false);
     sidebarStore.setWidth(0);

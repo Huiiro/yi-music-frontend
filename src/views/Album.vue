@@ -1,9 +1,40 @@
 <script setup lang="ts">
 import axios from 'axios';
 import {usePlayStore} from '@/store/play';
-import {demoData} from "@/api/interface.ts";
+import type {AudioTrack} from "@/api/interface.ts";
 
 const audioStore = usePlayStore();
+
+const demoData: AudioTrack[] = [
+  {
+    id: 1,
+    title: 'song1',
+    artist: 'artist1',
+    album: 'album1',
+    duration: 240,
+    coverUrl: 'string2',
+    audioUrl: 'string2',
+    lrc: ''
+  }, {
+    id: 2,
+    title: 'song2',
+    artist: 'artist2',
+    album: 'album2',
+    duration: 240,
+    coverUrl: 'string33',
+    audioUrl: 'string33',
+    lrc: ''
+  }, {
+    id: 3,
+    title: 'song2',
+    artist: 'artist2',
+    album: 'album2',
+    duration: 240,
+    coverUrl: 'string33',
+    audioUrl: 'string33',
+    lrc: ''
+  }
+]
 
 async function fetchAudioToStore(id: number) {
 

@@ -12,13 +12,14 @@ export const useUIStore = defineStore('ui', {
         leadingOptions: ['leading-10', 'leading-12', 'leading-16', 'leading-18'],
         sizeLabels: ['小', '中', '大', '特大'],
         showLyricSizeSlider: false,
-        displayMode: 0, // 0: 默认大屏, 1: 小屏模式布局, 2: 歌词上图下文
+        // 大屏模式
+        // 0: 默认大屏, 1: 歌词模式, 2: 简洁模式
+        displayMode: 0,
     }),
     getters: {
         lyricFontSizeClass: (state) =>
             state.fontSizeOptions[state.lyricFontSizeIndex],
 
-        // 高亮歌词大小：永远比当前大一号，但不超过 options 范围
         highlightFontSizeClass: (state) => {
             const nextIndex = Math.min(
                 state.lyricFontSizeIndex + 1,
@@ -39,8 +40,7 @@ export const useUIStore = defineStore('ui', {
                 state.leadingOptions.length - 1
             );
             return state.leadingOptions[nextIndex];
-        },
-        sizeLabel: (state) => state.sizeLabels[state.lyricFontSizeIndex],
+        }
     },
     actions: {
         /**

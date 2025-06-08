@@ -1,3 +1,4 @@
+<!-- 侧边栏组件 -->
 <script setup lang="ts">
 import defaultCover from '@/assets/svg/default/default-cover.svg';
 

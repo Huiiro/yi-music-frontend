@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted, ref} from 'vue';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import SidebarItem from './SidebarItem.vue';
 import {useSidebarStore} from "@/store/sidebar";
+import {useI18n} from 'vue-i18n';
+
+import SidebarItem from './SidebarItem.vue';
+
 import homeIcon from '@/assets/svg/menu/home.svg';
 import library from '@/assets/svg/menu/library.svg';
 import list from '@/assets/svg/menu/list.svg';
@@ -14,26 +17,25 @@ import artistIcon from '@/assets/svg/menu/artist.svg';
 import albumIcon from '@/assets/svg/menu/album.svg';
 
 const sidebarStore = useSidebarStore();
-
 const router = useRouter();
 const route = useRoute();
+const {t} = useI18n();
 
 const defaultWidth = sidebarStore.defaultWidth;
 let isResizing = false;
 
 //Data
-const sectionA = [
-  {title: '歌曲', path: '/song', icon: musicIcon},
-  {title: '歌手', path: '/artist', icon: artistIcon},
-  {title: '专辑', path: '/album', icon: albumIcon},
-];
-
+const sectionA = computed(() => [
+  {title: t('song'), path: '/song', icon: musicIcon},
+  {title: t('artist'), path: '/artist', icon: artistIcon},
+  {title: t('album'), path: '/album', icon: albumIcon},
+]);
 const sectionB = ref<{ title: string; path: string }[]>([]);
 const sectionC = ref<{ title: string; path: string }[]>([]);
-const sectionD = [
-  {title: '播放历史', path: '/history', icon: history},
-  {title: '设置', path: '/settings', icon: settings},
-];
+const sectionD = computed(() => [
+  {title: t('history'), path: '/history', icon: history},
+  {title: t('settings'), path: '/settings', icon: settings},
+]);
 
 //@ts-ignore
 function startResize(e: MouseEvent) {
@@ -65,8 +67,6 @@ function handleClick(path: string) {
 }
 
 async function fetchLibrary() {
-  // 模拟API请求
-  // TODO
   sectionB.value = [
     {title: '曲库 A', path: '/library/a'},
     {title: '曲库 B', path: '/library/b'},
@@ -110,13 +110,13 @@ onBeforeUnmount(() => {
       <div
           class="absolute top-0 right-0 h-full w-1 bg-transparent cursor-col-resize"
           @mousedown="startResize"
-      ></div>
+      />
 
       <!-- Section A -->
       <div>
         <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="homeIcon" alt="" class="w-4 h-4"/>
-          <span>开始</span>
+          <img :src="homeIcon" :alt="t('menu_start')" class="w-4 h-4"/>
+          <span> {{ t('menu_start') }}</span>
         </h2>
         <ul class="space-y-1 text-sm">
           <li
@@ -124,11 +124,11 @@ onBeforeUnmount(() => {
               :key="item.title"
               @click="handleClick(item.path)"
               :class="[
-        'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
-        isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
-      ]"
+                'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
+                isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
+              ]"
           >
-            <img :src="item.icon" alt="" class="w-4 h-4"/>
+            <img :src="item.icon" :alt="t(item.title)" class="w-4 h-4"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>
@@ -138,8 +138,8 @@ onBeforeUnmount(() => {
       <!-- Section B -->
       <div>
         <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="library" alt="" class="w-4 h-4"/>
-          <span>曲库</span>
+          <img :src="library" :alt="t('menu_library')" class="w-4 h-4"/>
+          <span> {{ t('menu_library') }} </span>
         </h2>
         <ul class="space-y-1">
           <li v-for="item in sectionB" :key="item.title">
@@ -152,8 +152,8 @@ onBeforeUnmount(() => {
       <!-- Section C -->
       <div>
         <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="list" alt="" class="w-4 h-4"/>
-          <span>歌单</span>
+          <img :src="list" :alt="t('menu_songList')" class="w-4 h-4"/>
+          <span>{{ t('menu_songList') }}</span>
         </h2>
         <ul class="space-y-1">
           <li v-for="item in sectionC" :key="item.title">
@@ -166,8 +166,8 @@ onBeforeUnmount(() => {
       <!-- Section D -->
       <div>
         <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="more" alt="" class="w-4 h-4"/>
-          <span>更多</span>
+          <img :src="more" :alt="t('menu_more')" class="w-4 h-4"/>
+          <span>{{ t('menu_more') }}</span>
         </h2>
         <ul class="space-y-1 text-sm">
           <li
@@ -175,11 +175,11 @@ onBeforeUnmount(() => {
               :key="item.title"
               @click="handleClick(item.path)"
               :class="[
-        'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
-        isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
-      ]"
+                'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
+                isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
+              ]"
           >
-            <img :src="item.icon" alt="" class="w-4 h-4"/>
+            <img :src="item.icon" :alt="t(item.title)" class="w-4 h-4"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>

@@ -1,4 +1,4 @@
-<!--播放控制条-->
+<!-- 播放控制条组件 -->
 <script setup lang="ts">
 import {defineEmits, defineProps} from 'vue';
 
@@ -7,9 +7,12 @@ import next from '@/assets/svg/play/next.svg';
 import play from '@/assets/svg/play/play.svg';
 import pause from '@/assets/svg/play/pause.svg';
 
-import {useAppStore} from "@/store/app";
+import {useAppStore} from '@/store/app';
+import {useI18n} from 'vue-i18n';
+import {formatTime} from '@/utils/time.ts';
 
 const appStore = useAppStore();
+const {t} = useI18n();
 
 const props = defineProps<{
   currentTrack: {
@@ -42,16 +45,20 @@ function onProgressChange(event: Event) {
 
     <div class="flex flex-col items-center">
       <div class="flex items-center gap-6 mb-1">
-        <button @click.stop="$emit('prevTrack')" aria-label="上一曲" class="hover:text-blue-500 transition">
-          <img :src="prev" alt="prev" :class="appStore.isSmallScreen ? 'w-5 h-5' : 'w-4 h-4'"/>
-
+        <button @click.stop="$emit('prevTrack')" :aria-label="t('prev_track_alt')"
+                class="hover:text-blue-500 transition">
+          <img :src="prev" :alt="t('prev_track_alt')" :class="appStore.isSmallScreen ? 'w-5 h-5' : 'w-4 h-4'"/>
         </button>
-        <button @click.stop="$emit('togglePlay')" aria-label="播放/暂停" class="hover:text-blue-500 transition">
-          <img v-if="isPlaying" :src="pause" alt="pause" :class="appStore.isSmallScreen ? 'w-10 h-10' : 'w-8 h-8'"/>
-          <img v-else :src="play" alt="play" :class="appStore.isSmallScreen ? 'w-10 h-10' : 'w-8 h-8'"/>
+        <button @click.stop="$emit('togglePlay')" :aria-label="t('play_pause_alt')"
+                class="hover:text-blue-500 transition">
+          <img v-if="isPlaying" :src="pause" :alt="t('pause_alt')"
+               :class="appStore.isSmallScreen ? 'w-10 h-10' : 'w-8 h-8'"/>
+          <img v-else :src="play" :alt="t('play_alt')"
+               :class="appStore.isSmallScreen ? 'w-10 h-10' : 'w-8 h-8'"/>
         </button>
-        <button @click.stop="$emit('nextTrack')" aria-label="下一曲" class="hover:text-blue-500 transition">
-          <img :src="next" alt="next" :class="appStore.isSmallScreen ? 'w-5 h-5' : 'w-4 h-4'"/>
+        <button @click.stop="$emit('nextTrack')" :aria-label="t('next_track_alt')"
+                class="hover:text-blue-500 transition">
+          <img :src="next" :alt="t('next_track_alt')" :class="appStore.isSmallScreen ? 'w-5 h-5' : 'w-4 h-4'"/>
         </button>
       </div>
 
@@ -73,15 +80,3 @@ function onProgressChange(event: Event) {
     </div>
   </div>
 </template>
-
-<script lang="ts">
-function formatTime(seconds: number): string {
-  const m = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, '0');
-  const s = Math.floor(seconds % 60)
-      .toString()
-      .padStart(2, '0');
-  return `${m}:${s}`;
-}
-</script>

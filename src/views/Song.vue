@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import SongItem from "@/components/song/SongItem.vue";
 import {ref} from "vue";
-import {usePlayStore} from "@/store/play";
-
-const playStore = usePlayStore;
+import SongItem from '@/components/song/SongItem.vue';
 
 const songList = [
   {
@@ -76,7 +73,6 @@ const playSongByIndex = ((index: number) => {
         @closeMenu="() => (activeMenuIndex = null)"
         @playSong="(index) => playSongByIndex(index)"
     />
-
   </div>
 
 </template>

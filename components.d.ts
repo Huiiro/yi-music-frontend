@@ -16,6 +16,7 @@ declare module 'vue' {
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     Header: typeof import('./src/components/layout/header/Header.vue')['default']
     Index: typeof import('./src/components/layout/Index.vue')['default']
+    LangSwitcher: typeof import('./src/components/layout/header/LangSwitcher.vue')['default']
     Lyrics: typeof import('./src/components/layout/playbar/Lyrics.vue')['default']
     Main: typeof import('./src/components/layout/main/Main.vue')['default']
     PlayBar: typeof import('./src/components/layout/playbar/PlayBar.vue')['default']

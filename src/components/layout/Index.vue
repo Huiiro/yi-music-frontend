@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Sidebar from '@/components/layout/sidebar/SideBar.vue'
-import Header from '@/components/layout/header/Header.vue'
-import PlayBar from '@/components/layout/playbar/PlayBar.vue'
+import Sidebar from '@/components/layout/sidebar/SideBar.vue';
+import Header from '@/components/layout/header/Header.vue';
+import PlayBar from '@/components/layout/playbar/PlayBar.vue';
 import Main from "@/components/layout/main/Main.vue";
 </script>
 
@@ -19,6 +19,3 @@ import Main from "@/components/layout/main/Main.vue";
     </div>
   </div>
 </template>
-
-<style scoped>
-</style>

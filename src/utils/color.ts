@@ -1,3 +1,7 @@
+/**
+ * 取色函数 获取专辑封面主色
+ * @param img
+ */
 export function getImageTopBottomColors(img: HTMLImageElement): {
     topColor: string;
     bottomColor: string;

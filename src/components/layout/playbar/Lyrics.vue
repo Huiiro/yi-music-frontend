@@ -1,8 +1,67 @@
+<!-- 歌词组件 -->
+<script setup lang="ts">
+import {ref, watch, computed, watchEffect} from 'vue';
+import {usePlayStore} from '@/store/play';
+import {useUIStore} from "@/store/ui";
+import {findCurrentLineIndex} from '@/utils/lyricParser';
+
+const playStore = usePlayStore();
+const uiStore = useUIStore();
+
+const lyrics = computed(() => playStore.currentTrack.lrc || []);
+const currentTime = computed(() => playStore.currentTime);
+const currentLyricIndex = computed(() =>
+    findCurrentLineIndex(lyrics.value, currentTime.value)
+);
+
+const lyricContainer = ref<HTMLDivElement | null>(null);
+const lyricLineRefs = ref<HTMLElement[]>([]);
+
+const setLyricRef = (el: Element | null, index: number) => {
+  if (el instanceof HTMLElement) {
+    lyricLineRefs.value[index] = el;
+  }
+}
+
+const scrollToCurrentLyric = (index: number) => {
+  const lineEl = lyricLineRefs.value[index];
+  const container = lyricContainer.value;
+  if (lineEl && container) {
+    const offsetTop = lineEl.offsetTop;
+    const containerHeight = container.clientHeight;
+    const lineHeight = lineEl.clientHeight;
+
+    container.scrollTo({
+      top: offsetTop - containerHeight / 2 + lineHeight / 2,
+      behavior: 'smooth',
+    });
+  }
+}
+
+/**
+ * 监听歌词索引
+ */
+watch(currentLyricIndex, (newIndex) => {
+  scrollToCurrentLyric(newIndex);
+});
+
+/**
+ * 监听用户事件 触发时高亮行自动局中
+ */
+watchEffect(() => {
+  const mode = uiStore.displayMode;
+  const fontSize = uiStore.lyricFontSizeIndex;
+  console.debug(`watch: playMode ${mode}, fontSieMode ${fontSize}`);
+  scrollToCurrentLyric(currentLyricIndex.value);
+});
+
+</script>
+
 <template>
   <div ref="lyricContainer" class="overflow-auto h-full lyric-scroll">
 
-    <!-- 顶部留白区域，用于滚动时歌词居中 -->
-    <div class="h-[40%] shrink-0"></div>
+    <!-- 顶部留白区域 -->
+    <div class="h-[40%] shrink-0"/>
 
     <!-- 歌词内容 -->
     <div class="w-full">
@@ -23,62 +82,9 @@
     </div>
 
     <!-- 底部留白区域 -->
-    <div class="h-[40%] shrink-0"></div>
+    <div class="h-[40%] shrink-0"/>
   </div>
 </template>
-
-
-<script setup lang="ts">
-import {ref, watch, computed, watchEffect} from 'vue';
-import {usePlayStore} from '@/store/play';
-import {findCurrentLineIndex} from '@/utils/lyricParser';
-import {useUIStore} from "@/store/ui";
-
-const playStore = usePlayStore();
-const uiStore = useUIStore();
-
-const lyrics = computed(() => playStore.currentTrack.lrc || []);
-const currentTime = computed(() => playStore.currentTime);
-const currentLyricIndex = computed(() =>
-    findCurrentLineIndex(lyrics.value, currentTime.value)
-);
-
-const lyricContainer = ref<HTMLDivElement | null>(null);
-const lyricLineRefs = ref<HTMLElement[]>([]);
-
-function setLyricRef(el: Element | null, index: number) {
-  if (el instanceof HTMLElement) {
-    lyricLineRefs.value[index] = el;
-  }
-}
-
-function scrollToCurrentLyric(index: number) {
-  const lineEl = lyricLineRefs.value[index];
-  const container = lyricContainer.value;
-  if (lineEl && container) {
-    const offsetTop = lineEl.offsetTop;
-    const containerHeight = container.clientHeight;
-    const lineHeight = lineEl.clientHeight;
-
-    container.scrollTo({
-      top: offsetTop - containerHeight / 2 + lineHeight / 2,
-      behavior: 'smooth',
-    });
-  }
-}
-
-watch(currentLyricIndex, (newIndex) => {
-  scrollToCurrentLyric(newIndex);
-});
-
-watchEffect(() => {
-  const mode = uiStore.displayMode;
-  const fontSize = uiStore.lyricFontSizeIndex;
-  console.debug(`watch: playMode ${mode}, fontSieMode ${fontSize}`);
-  scrollToCurrentLyric(currentLyricIndex.value);
-});
-
-</script>
 
 <style scoped>
 .lyric-scroll::-webkit-scrollbar {

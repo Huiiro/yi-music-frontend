@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
 import {useClickOutside} from '@/utils/useClickOutside';
+import {useI18n} from 'vue-i18n';
 
 import more from '@/assets/svg/menu/more-horizontal.svg';
 import play from '@/assets/svg/play/play.svg';
@@ -10,8 +11,10 @@ import artist from '@/assets/svg/menu/artist.svg';
 import album from '@/assets/svg/menu/album.svg';
 import deleteWarning from '@/assets/svg/common/delete.svg';
 
-import SongMenuItem from "@/components/song/SongMenuItem.vue";
-import {useMenuDirection} from "@/utils/useMenuDirection.ts";
+import SongMenuItem from '@/components/song/SongMenuItem.vue';
+import {useMenuDirection} from '@/utils/useMenuDirection.ts';
+
+const {t} = useI18n();
 
 const props = defineProps<{
   index: number;
@@ -48,7 +51,8 @@ const toggleMenu = () => {
   }
 };
 
-function handleDoubleClick() {
+// 双击播放
+const handleDoubleClick = () => {
   emit('playSong', props.index);
 }
 </script>
@@ -91,39 +95,40 @@ function handleDoubleClick() {
       <!-- 操作菜单按钮 + 菜单 -->
       <div class="ml-4 relative flex items-center justify-center" ref="menuRef">
         <button @click.stop="toggleMenu" class="hover:text-blue-500 text-gray-400">
-          <img :src="more" alt="" class="w-4 h-4"/>
+          <img :src="more" :alt="t('menu_alt')" class="w-4 h-4"/>
         </button>
 
         <!-- 菜单 -->
         <div
             v-if="isMenuOpen"
-            class="absolute right-0 w-40 bg-gray-800 text-white rounded shadow-lg z-[1000] overflow-hidden text-sm"
+            class="absolute right-0 w-40 bg-gray-800 text-white rounded shadow-lg
+            z-[1000] overflow-hidden text-sm"
             :class="menuDirection === 'top'
             ? 'bottom-full mb-2'
             : 'top-full mt-2'"
         >
-          <SongMenuItem :icon="play" label="播放"
+          <SongMenuItem :icon="play" :label="t('play_now')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="play" label="下一首播放"
+          <SongMenuItem :icon="play" :label="t('play_next')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="plus" label="添加至歌单/曲库"
+          <SongMenuItem :icon="plus" :label="t('add_song_list_library')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="plus" label="添加至播放列表"
+          <SongMenuItem :icon="plus" :label="t('add_playlist')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="artist" label="查看歌手"
+          <SongMenuItem :icon="artist" :label="t('show_artist')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="album" label="查看专辑"
+          <SongMenuItem :icon="album" :label="t('show_album')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="detail" label="查看详情"
+          <SongMenuItem :icon="detail" :label="t('show_detail')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
-          <SongMenuItem :icon="deleteWarning" label="删除"
+          <SongMenuItem :icon="deleteWarning" :label="t('delete')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
         </div>

@@ -1,4 +1,4 @@
-<!--歌曲信息-->
+<!-- 歌曲信息组件 -->
 <script setup lang="ts">
 import {defineProps} from 'vue';
 

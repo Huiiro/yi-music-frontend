@@ -1,7 +1,8 @@
-<!--音量控制条-->
+<!-- 音量控制组件 -->
 <script setup lang="ts">
-import { computed } from 'vue';
-import { usePlayStore } from '@/store/play';
+import {computed} from 'vue';
+import {usePlayStore} from '@/store/play';
+import {useI18n} from 'vue-i18n';
 
 import volumeHigh from '@/assets/svg/volume/volume-high.svg';
 import volumeMiddle from '@/assets/svg/volume/volume-middle.svg';
@@ -9,6 +10,7 @@ import volumeLow from '@/assets/svg/volume/volume-low.svg';
 import volumeMute from '@/assets/svg/volume/volume-mute.svg';
 
 const playStore = usePlayStore();
+const {t} = useI18n();
 
 const volumeIcon = computed(() => {
   const vol = playStore.muted ? 0 : playStore.volume;
@@ -32,7 +34,7 @@ const sliderValue = computed({
 });
 
 // 点击图标切换静音
-function toggleMute() {
+const toggleMute = () => {
   playStore.toggleMute();
 }
 </script>
@@ -41,11 +43,10 @@ function toggleMute() {
   <div class="flex items-center gap-2">
     <img
         :src="volumeIcon"
-        alt="volume"
+        :alt="t('volume_alt')"
         class="w-5 h-5 cursor-pointer"
         @click="toggleMute"
     />
-
     <input
         type="range"
         min="0"
