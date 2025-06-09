@@ -13,6 +13,7 @@ export const useAppStore = defineStore('app', {
         },
         setLocale(lang: string) {
             this.locale = lang
+            localStorage.setItem('locale', lang)
         },
     },
     persist: true
