@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import drag from '@/assets/svg/common/drag.svg';
+import drag from '@/assets/svg/common/drag-handle.svg';
 import deleteLight from '@/assets/svg/common/delete-light.svg';
 import defaultCover from '@/assets/svg/default/default-cover.svg';
 
@@ -21,7 +21,10 @@ defineEmits(['click', 'remove'])
       @click="$emit('click')"
   >
     <!-- 拖动图标 -->
-    <img :src="drag" alt="" class=" drag-handle w-4 h-4 mr-2 cursor-move text-gray-400" v-if="!$props.shuffle"/>
+    <img :src="drag" alt="" class=" drag-handle w-3 h-4 mr-2 cursor-move text-gray-400" v-if="!$props.shuffle"/>
+
+    <!-- 序号 -->
+    <span class="w-6 text-center text-sm text-gray-400 mr-2">{{ index + 1 }}</span>
 
     <!-- 封面和信息 -->
     <div class="flex items-center gap-3 flex-1">
