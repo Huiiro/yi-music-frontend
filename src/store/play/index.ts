@@ -4,12 +4,15 @@ import order from '@/assets/svg/control/order.svg';
 import loop from '@/assets/svg/control/loop.svg';
 import single from '@/assets/svg/control/single.svg';
 import shuffle from '@/assets/svg/control/shuffle.svg';
+import defaultCover from '@/assets/svg/default/default-cover.svg';
 
 import type {AudioTrack, LyricLine} from '@/api/interface'
 import {parseBlob} from "music-metadata-browser";
 import {parseLRC} from "@/utils/lyricParser.ts";
 import {getImageTopBottomColors} from "@/utils/color.ts";
 import {useUIStore} from "@/store/ui";
+import {shuffleArray} from "@/utils/array.ts";
+import {fetchSongAudioBlob} from "@/api/song.ts";
 
 const uiStore = useUIStore();
 
@@ -38,6 +41,8 @@ export const usePlayStore = defineStore('play', {
         playMode: 0,
         // 播放列表
         playList: [] as AudioTrack[],
+        // 播放列表 (随机打乱)
+        shuffleList: [] as AudioTrack[],
         // 音量
         volume: 50,
         tempVolume: 50,
@@ -46,7 +51,6 @@ export const usePlayStore = defineStore('play', {
         audioBlob: null as Blob | null,
         audioUrl: null as string | null,
         audioElement: null as HTMLAudioElement | null,
-
     }),
     getters: {
         playModeIcon(state) {
@@ -78,10 +82,6 @@ export const usePlayStore = defineStore('play', {
             // 初始化为空
         },
 
-
-        /**
-         * audios
-         */
         // 清理音频
         clearAudio() {
             if (this.audioElement && typeof this.audioElement.pause === 'function') {
@@ -101,8 +101,133 @@ export const usePlayStore = defineStore('play', {
 
             this.audioBlob = null;
         },
+
+        // 播放音频
+        play() {
+            if (this.audioElement) {
+                this.audioElement.play();
+                this.isPlay = true;
+            }
+        },
+
+        // 暂停音频
+        pause() {
+            if (this.audioElement) {
+                this.audioElement.pause();
+                this.isPlay = false;
+            }
+        },
+
+        // 切换到上一首
+        prevTrack() {
+            this.setPlaylistCurrentIndex(0);
+        },
+
+        // 切换到下一首
+        nextTrack() {
+            this.setPlaylistCurrentIndex(1);
+        },
+
+        // 修改音量
+        setVolume(value: number) {
+            this.volume = value;
+            this.tempVolume = value;
+
+            if (value > 0) this.muted = false;
+
+            if (this.audioElement) {
+                this.audioElement.volume = this.effectiveVolume;
+            }
+        },
+
+        // 修改静音
+        setMuted(flag: boolean) {
+            this.muted = flag;
+        },
+
+        // 修改当前音频播放进度
+        setCurrentTime(time: number) {
+            if (this.audioElement) {
+                this.audioElement.currentTime = time;
+                this.currentTime = time;
+            }
+        },
+
+        // 修改当前播放列表播放索引
+        setPlaylistCurrentIndex(direction: number) {
+            const total = this.playMode === 3 ? this.shuffleList.length : this.playList.length;
+            if (total === 0) return;
+
+            let newIndex = this.currentIndex;
+
+            switch (this.playMode) {
+                case 0: // 顺序播放
+                    if (direction === 1 && newIndex < total - 1) {
+                        newIndex++;
+                    } else if (direction === 0 && newIndex > 0) {
+                        newIndex--;
+                    } else {
+                        return;
+                    }
+                    break;
+
+                case 1: // 列表循环
+                    if (direction === 1) {
+                        newIndex = (newIndex + 1) % total;
+                    } else {
+                        newIndex = (newIndex - 1 + total) % total;
+                    }
+                    break;
+
+                case 2: // 单曲循环
+                    break;
+
+                case 3: // 随机播放
+                    if (direction === 1) {
+                        newIndex = (newIndex + 1) % total;
+                    } else {
+                        newIndex = (newIndex - 1 + total) % total;
+                    }
+                    break;
+            }
+
+            this.currentIndex = newIndex;
+            this.setCurrentTrack().then();
+        },
+
+        // 根据歌曲ID更新播放列表索引
+        updatePlaylistIndexBySongId(songId: number) {
+            if (this.playMode === 3) {
+                const index = this.shuffleList.findIndex(song => song.id === songId);
+                if (index >= 0) {
+                    this.currentIndex = index;
+                }
+            } else {
+                const index = this.playList.findIndex(song => song.id === songId);
+                if (index >= 0) {
+                    this.currentIndex = index;
+                }
+            }
+        },
+
+        // 加载当前播放音乐
+        async setCurrentTrack() {
+            const list = this.playMode === 3 ? this.shuffleList : this.playList;
+            const track = list[this.currentIndex];
+            if (!track) return;
+
+            try {
+                const res = await fetch(`/api/audio/${track.id}`);
+                const blob = await res.blob();
+
+                await this.setAudioBlobAndPlay(blob, true)
+            } catch (e) {
+                console.error('加载音频失败', e);
+            }
+        },
+
         // 获取音频并播放
-        async setAudioBlob(blob: Blob) {
+        async setAudioBlobAndPlay(blob: Blob, autoPlay: boolean) {
             // 清理上一首音频
             this.clearAudio();
 
@@ -126,12 +251,29 @@ export const usePlayStore = defineStore('play', {
             await this.parseMetadata(blob);
 
             // 自动播放
-            try {
-                this.play();
-            } catch (e) {
-                console.warn('自动播放失败', e);
+            if (autoPlay) {
+                try {
+                    this.play();
+                } catch (e) {
+                    this.pause();
+                    console.warn('自动播放失败', e);
+                }
+            } else {
+                // 非自动播放情况
+                // 只适配刷新后丢失信息情况 此时 autoPlay 为 false
+                this.audioElement.currentTime = this.currentTime;
             }
         },
+
+        // 核心对外接口 根据歌曲ID 播放
+        async playSongById(id: number, autoPlay: boolean) {
+            const response = await fetchSongAudioBlob(id);
+            // 更新播放音频
+            await this.setAudioBlobAndPlay(response.data, autoPlay);
+            // 更新播放列表索引
+            this.updatePlaylistIndexBySongId(id);
+        },
+
         // 获取音频元数据
         async parseMetadata(blob: Blob) {
             try {
@@ -177,7 +319,7 @@ export const usePlayStore = defineStore('play', {
                     title: meta.common.title || '未知标题',
                     artist: meta.common.artist || '未知艺术家',
                     album: meta.common.album || '',
-                    cover: coverUrl,
+                    cover: coverUrl || defaultCover,
                     duration: meta.format.duration || 0,
                     lrc: lrcLines,
                     url: '',
@@ -186,77 +328,69 @@ export const usePlayStore = defineStore('play', {
                 console.error('解析元数据出错:', err);
             }
         },
-        // 播放音乐
-        playTrack(direction: number) {
-            const total = this.playList.length;
-            if (total === 0) return;
 
-            let newIndex = this.currentIndex;
+        // 设置播放列表
+        setPlayList(audioList: AudioTrack[]) {
+            this.playList = audioList;
 
-            switch (this.playMode) {
-                case 0: // 顺序播放
-                    if (direction === 1 && newIndex < total - 1) {
-                        newIndex++;
-                    } else if (direction === 0 && newIndex > 0) {
-                        newIndex--;
-                    } else {
-                        return; // 播放完毕或无上一首
-                    }
-                    break;
-
-                case 1: // 列表循环
-                    if (direction === 1) {
-                        newIndex = (newIndex + 1) % total;
-                    } else {
-                        newIndex = (newIndex - 1 + total) % total;
-                    }
-                    break;
-
-                case 2: // 单曲循环
-                    // 不变，newIndex = this.currentIndex
-                    break;
-
-                case 3: // 随机播放
-                    do {
-                        newIndex = Math.floor(Math.random() * total);
-                    } while (newIndex === this.currentIndex && total > 1); // 避免重复
-                    break;
-            }
-
-            this.currentIndex = newIndex;
-            this.loadCurrentTrack().then();
-        },
-        // 加载音乐
-        async loadCurrentTrack() {
-            const track = this.playList[this.currentIndex];
-            if (!track) return;
-
-            try {
-                const res = await fetch(`/api/audio/${track.id}`);
-                const blob = await res.blob();
-
-                // 设置当前播放
-                await this.setAudioBlob(blob)
-            } catch (e) {
-                console.error('加载音频失败', e);
+            if (this.playMode === 3 && audioList.length > 0) {
+                const current = audioList[0]; // 默认第一首为当前播放
+                const rest = audioList.slice(1);
+                const shuffled = shuffleArray(rest);
+                this.shuffleList = [current, ...shuffled];
+                this.currentIndex = 0;
+            } else {
+                // 正常模式下同步索引
+                this.shuffleList = [];
+                this.currentIndex = 0;
             }
         },
 
-        /**
-         * plays
-         */
+        // 清空播放列表
+        clearPlayList() {
+            this.playList = [];
+            this.shuffleList = [];
+            this.setAudioBlobAndPlay(new Blob(), true).then(() => {
+            });
+            this.currentIndex = 0;
+        },
+
+        // 从播放列表移除歌曲
+        removeTrackFromPlaylist(id: number) {
+            this.playList = this.playList.filter(t => t.id !== id);
+            this.shuffleList = this.shuffleList.filter(t => t.id !== id);
+            if (this.currentIndex >= this.playList.length) this.currentIndex = 0;
+        },
+
         // 切换播放模式
         togglePlayMode() {
+            const prevMode = this.playMode;
             this.playMode = (this.playMode + 1) % 4;
+
+            // 切换为随机播放
+            if (this.playMode === 3) {
+                const currentTrack = this.playList[this.currentIndex];
+                const remainingTracks = [...this.playList];
+                remainingTracks.splice(this.currentIndex, 1);
+
+                const shuffled = shuffleArray(remainingTracks);
+                this.shuffleList = [currentTrack, ...shuffled];
+                this.currentIndex = 0;
+            }
+
+            // 从随机切回顺序/循环/单曲播放
+            if (prevMode === 3 && this.playMode !== 3) {
+                const currentTrack = this.shuffleList[this.currentIndex];
+                const indexInPlayList = this.playList.findIndex(track => track.id === currentTrack.id);
+                if (indexInPlayList !== -1) {
+                    this.currentIndex = indexInPlayList;
+                } else {
+                    console.warn('播放列表中找不到当前曲目，重置为0');
+                    this.currentIndex = 0;
+                }
+            }
         },
-        // 切换到上一首
-        prevTrack() {
-            this.playTrack(0);
-        },
-        // 切换到下一首
-        nextTrack() {
-            this.playTrack(1);
-        },
+
         // 切换播放
         togglePlay() {
             if (this.isPlay)
@@ -264,35 +398,7 @@ export const usePlayStore = defineStore('play', {
             else
                 this.play();
         },
-        // 播放音频
-        play() {
-            if (this.audioElement) {
-                this.audioElement.play();
-                this.isPlay = true;
-            }
-        },
-        // 暂停音频
-        pause() {
-            if (this.audioElement) {
-                this.audioElement.pause();
-                this.isPlay = false;
-            }
-        },
-        // 修改播放进度
-        setCurrentTime(time: number) {
-            if (this.audioElement) {
-                this.audioElement.currentTime = time;
-                this.currentTime = time;
-            }
-        },
-        // 设置播放列表
-        setPlayList(audioList: AudioTrack[]) {
-            this.playList = audioList;
-        },
 
-        /**
-         * volumes
-         */
         // 切换静音
         toggleMute() {
             this.muted = !this.muted;
@@ -306,22 +412,19 @@ export const usePlayStore = defineStore('play', {
                 this.audioElement.volume = this.effectiveVolume;
             }
         },
-        // 修改音量
-        setVolume(value: number) {
-            this.volume = value;
-            this.tempVolume = value;
 
-            if (value > 0) this.muted = false;
-
-            if (this.audioElement) {
-                this.audioElement.volume = this.effectiveVolume;
+        // 检测是否需要重新初始化
+        // 由于浏览器播放策略，设置为关闭自动播放
+        async checkInit() {
+            this.isPlay = false;
+            if (this.playMode === 3) {
+                // 随机模式
+                await this.playSongById(this.shuffleList[this.currentIndex].id, false);
+            } else {
+                // 一般模式
+                await this.playSongById(this.playList[this.currentIndex].id, false);
             }
-        },
-        // 修改静音
-        setMuted(flag: boolean) {
-            this.muted = flag;
-        },
-
+        }
     },
     persist: true
 });

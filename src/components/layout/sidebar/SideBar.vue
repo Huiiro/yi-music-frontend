@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
                 isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
               ]"
           >
-            <img :src="item.icon" :alt="t(item.title)" class="w-4 h-4"/>
+            <img :src="item.icon" alt="" class="w-4 h-4"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>
@@ -179,7 +179,7 @@ onBeforeUnmount(() => {
                 isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
               ]"
           >
-            <img :src="item.icon" :alt="t(item.title)" class="w-4 h-4"/>
+            <img :src="item.icon" alt="" class="w-4 h-4"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>

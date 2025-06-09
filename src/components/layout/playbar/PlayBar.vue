@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue';
+import {computed, nextTick, ref, watch} from 'vue';
 import {usePlayStore} from '@/store/play';
 import {useAppStore} from '@/store/app';
 import {useUIStore} from '@/store/ui';
@@ -19,9 +19,11 @@ import play from '@/assets/svg/play/play.svg';
 import pause from '@/assets/svg/play/pause.svg';
 import next from '@/assets/svg/play/next.svg';
 
+import draggable from 'vuedraggable';
 import {useClickOutside} from '@/utils/useClickOutside.ts';
 import {findCurrentLineIndex} from '@/utils/lyricParser.ts';
 import {formatTime} from '@/utils/time.ts';
+import TrackRow from "@/components/layout/playbar/TrackRow.vue";
 
 const playStore = usePlayStore();
 const appStore = useAppStore();
@@ -62,12 +64,6 @@ const nextTrack = () => {
 // 拖动进度条事件
 const onProgressChange = (value: number) => {
   playStore.setCurrentTime(value);
-}
-
-// 打开播放列表
-const openPlaylist = (e: Event) => {
-  e.stopPropagation();
-  console.log('打开播放列表');
 }
 
 // 切换大屏
@@ -142,9 +138,122 @@ watch(
     }
 );
 
+// 播放列表抽屉
+const drawer = ref(false);
+
+const isCurrent = (id: number) => {
+  const currentTrack = getCurrentList()[playStore.currentIndex];
+  return currentTrack?.id === id;
+};
+
+const playTrackById = (id: number) => {
+  playStore.playSongById(id, true);
+};
+
+const getCurrentList = () =>
+    playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+
+const removeTrackById = (id: number) => {
+  playStore.removeTrackFromPlaylist(id);
+};
+
+const clearList = () => {
+  playStore.clearPlayList();
+};
+
+// 自动滚动定位当前播放项
+const listContainer = ref<HTMLElement | null>(null);
+
+const scrollToCurrent = async () => {
+  await nextTick();
+  const currentId = getCurrentList()?.[playStore.currentIndex]?.id;
+  if (!currentId || !listContainer.value) return;
+
+  const el = listContainer.value.querySelector(`[data-id="${currentId}"]`);
+  if (el && el instanceof HTMLElement) {
+    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+};
+
+// 拖动实现
+const draggedTrackId = ref<number | null>(null);
+
+const listRef = computed({
+  get() {
+    return playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+  },
+  set(val) {
+    if (playStore.playMode === 3) {
+      playStore.shuffleList = val;
+    } else {
+      playStore.playList = val;
+    }
+  }
+});
+
+const onDragStart = () => {
+  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+  draggedTrackId.value = list[playStore.currentIndex]?.id ?? null;
+};
+
+const onDragEnd = () => {
+  if (!draggedTrackId.value) return;
+
+  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+  const newIndex = list.findIndex(t => t.id === draggedTrackId.value);
+
+  if (newIndex !== -1) {
+    playStore.currentIndex = newIndex;
+  }
+
+  draggedTrackId.value = null;
+};
 </script>
 
 <template>
+
+  <!-- 播放列表 -->
+  <div>
+    <!--el-dom 挂载在根节点才能使v-deep生效-->
+    <el-drawer
+        v-model="drawer"
+        size="360"
+        :with-header="false"
+        direction="ltr"
+        @start="onDragStart"
+        @open="scrollToCurrent"
+    >
+      <div class="bg-gray-900 text-white">
+        <!-- header -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-700">
+          <h2 class="text-lg font-semibold">{{ t('playlist') }}</h2>
+          <button @click="clearList"> {{ t('clear_playlist') }}</button>
+        </div>
+
+        <!-- 拖动排序区域 -->
+        <div class="overflow-y-auto max-h-[calc(100vh-100px)]" ref="listContainer">
+          <draggable
+              v-model="listRef"
+              item-key="id"
+              animation="200"
+              ghost-class="bg-gray-800"
+              handle=".drag-handle"
+              @end="onDragEnd"
+          >
+            <template #item="{ element: item, index }">
+              <TrackRow :track="item"
+                        :index="index"
+                        :isCurrent="isCurrent(item.id)"
+                        @dblclick="playTrackById(item.id)"
+                        @remove="removeTrackById(item.id)"
+              />
+            </template>
+          </draggable>
+        </div>
+      </div>
+    </el-drawer>
+  </div>
+
   <!-- 大屏播放页 -->
   <transition name="slide-up-fade">
     <div
@@ -401,7 +510,7 @@ watch(
       <!--播放列表控制-->
       <button
           class="text-gray-400 hover:text-blue-500 transition text-lg select-none"
-          @click.stop="openPlaylist"
+          @click.stop="drawer = true;"
           :title="t('playlist_alt')"
       >
         <img :src="playlist" :alt="t('playlist_alt')" class="w-6 h-6"/>
@@ -456,4 +565,15 @@ watch(
   opacity: 0;
   transform: translateY(-6px);
 }
+
+::v-deep(.el-drawer__body) {
+  margin-top: 20px;
+  padding: 0;
+}
+
+::v-deep(.el-drawer) {
+  background-color: transparent;
+  --el-drawer-bg-color: transparent;
+}
+
 </style>

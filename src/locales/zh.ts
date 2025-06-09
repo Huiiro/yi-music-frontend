@@ -50,5 +50,7 @@ export default {
     show_cover: '查看封面',
     show_detail: '查看详情',
     delete: '删除',
+    playlist: '播放列表',
+    clear_playlist: '清空列表',
 }
 

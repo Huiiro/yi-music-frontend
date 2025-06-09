@@ -10,6 +10,7 @@ import detail from '@/assets/svg/common/detail.svg';
 import artist from '@/assets/svg/menu/artist.svg';
 import album from '@/assets/svg/menu/album.svg';
 import deleteWarning from '@/assets/svg/common/delete.svg';
+import defaultCover from '@/assets/svg/default/default-cover.svg';
 
 import SongMenuItem from '@/components/song/SongMenuItem.vue';
 import {useMenuDirection} from '@/utils/useMenuDirection.ts';
@@ -22,7 +23,7 @@ const props = defineProps<{
   artist: string;
   album: string;
   duration: string;
-  cover: string;
+  cover: string | null;
   activeMenuIndex: number | null;
 }>();
 
@@ -55,6 +56,7 @@ const toggleMenu = () => {
 const handleDoubleClick = () => {
   emit('playSong', props.index);
 }
+
 </script>
 
 <template>
@@ -68,7 +70,7 @@ const handleDoubleClick = () => {
 
       <!-- 封面 -->
       <img
-          :src="props.cover"
+          :src="props.cover ? props.cover : defaultCover"
           alt="cover"
           class="w-12 h-12 rounded object-cover bg-gray-700 mx-3"
       />
@@ -93,7 +95,7 @@ const handleDoubleClick = () => {
       </div>
 
       <!-- 操作菜单按钮 + 菜单 -->
-      <div class="ml-4 relative flex items-center justify-center" ref="menuRef">
+      <div class="ml-4 mr-2 relative flex items-center justify-center" ref="menuRef">
         <button @click.stop="toggleMenu" class="hover:text-blue-500 text-gray-400">
           <img :src="more" :alt="t('menu_alt')" class="w-4 h-4"/>
         </button>

@@ -15,3 +15,18 @@ export interface LyricLine {
     time: number;
     text: string;
 }
+
+export interface songEntity {
+    id: number;
+    cover: string;
+    title: string;
+    artist: string;
+    album: string;
+    duration: string;
+}
+
+export interface pageEntity {
+    current: number;
+    size: number;
+    total: number;
+}

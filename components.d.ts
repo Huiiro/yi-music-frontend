@@ -14,6 +14,7 @@ declare module 'vue' {
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     Header: typeof import('./src/components/layout/header/Header.vue')['default']
     Index: typeof import('./src/components/layout/Index.vue')['default']
     LangSwitcher: typeof import('./src/components/layout/header/LangSwitcher.vue')['default']
@@ -29,6 +30,10 @@ declare module 'vue' {
     SongItem: typeof import('./src/components/song/SongItem.vue')['default']
     SongMenuItem: typeof import('./src/components/song/SongMenuItem.vue')['default']
     TrackInfo: typeof import('./src/components/layout/playbar/TrackInfo.vue')['default']
+    TrackRow: typeof import('./src/components/layout/playbar/TrackRow.vue')['default']
     Volume: typeof import('./src/components/layout/playbar/Volume.vue')['default']
+  }
+  export interface GlobalDirectives {
+    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
   }
 }

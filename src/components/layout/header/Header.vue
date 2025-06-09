@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {watch} from 'vue';
+import {ref, watch} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {useSidebarStore} from '@/store/sidebar';
 import {useAppStore} from '@/store/app';
@@ -58,7 +58,7 @@ const goForward = () => {
  * 上传文件
  */
 const uploadLocalFiles = () => {
-
+  fileInputRef.value?.click();
 }
 
 /**
@@ -73,6 +73,29 @@ const openUserInfo = () => {
  */
 const searchAggregation = () => {
   console.log('user search')
+}
+
+const fileInputRef = ref<HTMLInputElement | null>(null);
+
+const handleFileChange = async (event: Event) => {
+  const files = (event.target as HTMLInputElement).files;
+  if (!files || files.length === 0) return;
+
+  console.log(files);
+
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append('files', file);
+  }
+
+  try {
+    console.log(formData)
+    //await uploadMusicFiles(formData);
+    // 成功后刷新音乐列表，或提示
+    console.log('上传成功');
+  } catch (error) {
+    console.error('上传失败', error);
+  }
 }
 </script>
 
@@ -112,6 +135,14 @@ const searchAggregation = () => {
       <button @click="uploadLocalFiles" class="text-xl hover:text-blue-400">
         <img :src="plus" alt="t('upload_file_alt')" class="w-6 h-6"/>
       </button>
+      <input
+          ref="fileInputRef"
+          type="file"
+          multiple
+          accept="audio/*"
+          class="hidden"
+          @change="handleFileChange"
+      />
       <!--用户信息-->
       <button @click="openUserInfo" class="text-xl hover:text-blue-400">
         <img :src="user" alt="t('user_info_alt')" class="w-5 h-5"/>

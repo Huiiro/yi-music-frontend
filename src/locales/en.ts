@@ -50,4 +50,6 @@ export default {
     show_cover: 'View cover',
     show_detail: 'View details',
     delete: 'Delete',
+    playlist: 'Playlist',
+    clear_playlist: 'Clear Playlist',
 }

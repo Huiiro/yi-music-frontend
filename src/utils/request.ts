@@ -12,7 +12,12 @@ request.interceptors.request.use((config) => {
 
 //@ts-ignore
 request.interceptors.response.use((response) => {
-
+    // blob数据
+    if (response.data instanceof Blob) {
+        return Promise.resolve(response);
+    }
+    // 一般情况
+    return Promise.resolve(response.data);
 });
 
 
