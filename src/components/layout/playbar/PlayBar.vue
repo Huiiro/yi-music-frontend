@@ -259,7 +259,7 @@ const onDragEnd = () => {
     <div
         v-if="showPlayer"
         class="fixed inset-x-0 top-0 bottom-16 bg-opacity-90 text-white z-40
-        flex flex-col rounded-t-lg transition-colors duration-300"
+         flex flex-col rounded-t-lg transition-[background] duration-300"
         :style="backgroundStyle"
         @click.self="closePlayer"
     >

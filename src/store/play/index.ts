@@ -296,6 +296,9 @@ export const usePlayStore = defineStore('play', {
                         };
                         img.onerror = reject;
                     });
+                } else {
+                    // 为默认封面设置单独背景样式
+                    uiStore.setGradientColors('#454545', '#222222');
                 }
 
                 let rawLyrics =
