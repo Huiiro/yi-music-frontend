@@ -1,6 +1,6 @@
 import request from '@/utils/request.ts';
 import qs from 'qs';
-import type {pageEntity, songEntity} from "@/api/interface.ts";
+import type {pageEntity, songEntity, SortEntity, SourceEntity} from "@/api/interface.ts";
 
 
 /**
@@ -26,9 +26,30 @@ export const getSongList2Playlist = () =>
     request.get('/song/playlist/all');
 
 /**
+ * 聚合排序查询
+ * @param sortEntity
+ * @param sourceEntity
+ * @param page
+ */
+export const aggregationSort = (sortEntity: SortEntity | null,
+                                sourceEntity: SourceEntity | null,
+                                page: pageEntity) =>
+    request.get('song/aggregation/sort', {
+        params: {
+            ...(sortEntity || {}),
+            ...(sourceEntity || {}),
+            ...page
+        },
+        paramsSerializer: function (params) {
+            return qs.stringify(params, {arrayFormat: 'comma'})
+        }
+    });
+
+/**
  * 获取歌曲
  */
 export const fetchSongAudioBlob = (id: number) =>
     request.get(`audio/${id}`, {
         responseType: 'blob'
-    })
+    });
+

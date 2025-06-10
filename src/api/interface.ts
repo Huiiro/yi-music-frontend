@@ -30,3 +30,16 @@ export interface pageEntity {
     size: number;
     total: number;
 }
+
+export interface SortEntity {
+    sortType: string,
+    sortOrder: string
+}
+
+export interface SearchEntity {
+
+}
+
+export interface SourceEntity {
+
+}

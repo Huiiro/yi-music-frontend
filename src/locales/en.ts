@@ -52,4 +52,18 @@ export default {
     delete: 'Delete',
     playlist: 'Playlist',
     clear_playlist: 'Clear Playlist',
+    no_more_content: 'There\'s no more content left',
+    multi_select: 'Multi-select',
+    cancel_selection: 'Cancel',
+    select_all: 'Select all',
+    unselect_all: 'Cancel',
+    play: 'Play',
+    add: 'Add',
+    selected: 'Selected',
+    selected_items: 'songs',
+    sort_by_default: 'Default sort',
+    sort_by_title: 'Sort by title',
+    sort_by_artist: 'Sort by artist',
+    sort_by_album: 'Sort by album',
+    sort_by_duration: 'Sort by duration'
 }

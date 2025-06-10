@@ -9,7 +9,7 @@ import plus from '@/assets/svg/common/plus.svg';
 import detail from '@/assets/svg/common/detail.svg';
 import artist from '@/assets/svg/menu/artist.svg';
 import album from '@/assets/svg/menu/album.svg';
-import deleteWarning from '@/assets/svg/common/delete.svg';
+import deleteWarning from '@/assets/svg/common/delete-red.svg';
 import defaultCover from '@/assets/svg/default/default-cover.svg';
 
 import SongMenuItem from '@/components/song/SongMenuItem.vue';
@@ -25,12 +25,15 @@ const props = defineProps<{
   duration: string;
   cover: string | null;
   activeMenuIndex: number | null;
+  multiSelectMode?: boolean,
+  selected?: boolean
 }>();
 
 const emit = defineEmits<{
   (e: 'openMenu', index: number): void;
   (e: 'closeMenu'): void;
   (e: 'playSong', index: number): void;
+  (e: 'toggleSelect'): void;
 }>();
 
 const menuRef = ref<HTMLElement | null>(null);
@@ -63,6 +66,17 @@ const handleDoubleClick = () => {
   <div class="w-full text-white" @dblclick="handleDoubleClick">
     <!-- Row -->
     <div class="flex items-center px-4 py-3 hover:bg-gray-800 transition group relative">
+
+      <!-- 多选框 -->
+      <div v-if="multiSelectMode" class="w-6 flex justify-center pr-4">
+        <input
+            type="checkbox"
+            class="form-checkbox accent-blue-500 cursor-pointer"
+            :checked="selected"
+            @click.stop="$emit('toggleSelect')"
+        />
+      </div>
+
       <!-- 序号 -->
       <div class="w-8 text-sm text-gray-400">
         {{ props.index }}

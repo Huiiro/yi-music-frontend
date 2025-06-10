@@ -82,6 +82,34 @@ export const usePlayStore = defineStore('play', {
             // 初始化为空
         },
 
+        // 通过 index 获取歌曲 id
+        getCurrentSongIdByIndex() {
+            let pid;
+            if (this.playMode === 3) {
+                pid = this.shuffleList[this.currentIndex].id
+            } else {
+                pid = this.playList[this.currentIndex].id
+            }
+            return pid;
+        },
+
+        // 通过歌曲 id 获取 index
+        getCurrentIndexBySongId(songId: number) {
+            let index = 0;
+            if (this.playMode === 3) {
+                const f_index = this.shuffleList.findIndex(song => song.id === songId);
+                if (f_index >= 0) {
+                    index = f_index;
+                }
+            } else {
+                const f_index = this.playList.findIndex(song => song.id === songId);
+                if (f_index >= 0) {
+                    index = f_index;
+                }
+            }
+            return index;
+        },
+
         // 清理音频
         clearAudio() {
             if (this.audioElement && typeof this.audioElement.pause === 'function') {
@@ -197,17 +225,7 @@ export const usePlayStore = defineStore('play', {
 
         // 根据歌曲ID更新播放列表索引
         updatePlaylistIndexBySongId(songId: number) {
-            if (this.playMode === 3) {
-                const index = this.shuffleList.findIndex(song => song.id === songId);
-                if (index >= 0) {
-                    this.currentIndex = index;
-                }
-            } else {
-                const index = this.playList.findIndex(song => song.id === songId);
-                if (index >= 0) {
-                    this.currentIndex = index;
-                }
-            }
+            this.currentIndex = this.getCurrentIndexBySongId(songId);
         },
 
         // 加载当前播放音乐
@@ -350,16 +368,23 @@ export const usePlayStore = defineStore('play', {
         },
 
         // 清空播放列表
+        // 清空刷新后，会重新载入playlist
         clearPlayList() {
             this.playList = [];
             this.shuffleList = [];
-            this.setAudioBlobAndPlay(new Blob(), true).then(() => {
-            });
-            this.currentIndex = 0;
+            this.currentIndex = -1;
+        },
+
+        // 添加歌曲至播放列表
+        addSongToPlaylist(at: AudioTrack) {
+            console.log(at)
         },
 
         // 从播放列表移除歌曲
+        // 为避免bug 不允许删除当前歌曲
         removeTrackFromPlaylist(id: number) {
+            if (this.getCurrentSongIdByIndex() == id) return;
+
             this.playList = this.playList.filter(t => t.id !== id);
             this.shuffleList = this.shuffleList.filter(t => t.id !== id);
             if (this.currentIndex >= this.playList.length) this.currentIndex = 0;
