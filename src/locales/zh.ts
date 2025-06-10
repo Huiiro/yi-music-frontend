@@ -9,6 +9,7 @@ export default {
     lyrics_font_size: '歌词大小',
     lyrics_font_alt: '字体大小',
     display_type_alt: '显示方式',
+    immerse_mode_alt: '沉浸模式',
     fullscreen_alt: '切换全屏',
     close_alt: '关闭',
     track_cover_alt: '封面',

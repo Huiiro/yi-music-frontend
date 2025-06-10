@@ -18,6 +18,7 @@ import close from '@/assets/svg/menu/close.svg';
 import play from '@/assets/svg/play/play.svg';
 import pause from '@/assets/svg/play/pause.svg';
 import next from '@/assets/svg/play/next.svg';
+import light from '@/assets/svg/common/light.svg';
 
 import draggable from 'vuedraggable';
 import {useClickOutside} from '@/utils/useClickOutside.ts';
@@ -264,12 +265,24 @@ const onDragEnd = () => {
         @click.self="closePlayer"
     >
       <!--遮罩层-->
-      <div class="absolute inset-0 bg-black opacity-50 pointer-events-none"/>
+      <div
+          class="absolute inset-0 bg-black pointer-events-none transition-opacity duration-500"
+          :class="uiStore.immerseMode ? 'opacity-92' : 'opacity-50'"
+      />
 
       <!-- header 区域 -->
       <header class="flex justify-between items-center p-4 relative z-10">
         <h2 class="text-xl font-bold">{{ appStore.logoText }}</h2>
         <div class="flex items-center gap-3">
+
+          <!-- 显示沉浸模式按钮 -->
+          <button
+              @click="uiStore.toggleImmerseMode"
+              :title="t('immerse_mode_alt')"
+              class="w-8 h-8 flex items-center justify-center"
+          >
+            <img :src="light" :alt="t('immerse_mode_alt')" class="w-6 h-6"/>
+          </button>
 
           <!-- 字体大小按钮 -->
           <div class="relative" ref="sliderWrapperRef">
@@ -446,7 +459,10 @@ const onDragEnd = () => {
       @click="togglePlayer"
   >
     <!-- 遮罩 -->
-    <div class="absolute inset-0 bg-black opacity-60 pointer-events-none"/>
+    <div
+        class="absolute inset-0 bg-black pointer-events-none transition-opacity duration-500"
+        :class="uiStore.immerseMode ? 'opacity-100' : 'opacity-60'"
+    />
 
     <!-- 左侧封面与信息 -->
     <TrackInfo

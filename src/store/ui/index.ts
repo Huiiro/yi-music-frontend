@@ -15,6 +15,8 @@ export const useUIStore = defineStore('ui', {
         // 大屏模式
         // 0: 默认大屏, 1: 歌词模式, 2: 简洁模式
         displayMode: 0,
+        // 沉浸模式
+        immerseMode: false
     }),
     getters: {
         lyricFontSizeClass: (state) =>
@@ -65,5 +67,9 @@ export const useUIStore = defineStore('ui', {
                 this.displayMode = (this.displayMode + 1) % 3;
             }
         },
+        toggleImmerseMode() {
+            this.immerseMode = !this.immerseMode;
+            console.log(this.immerseMode);
+        }
     }
 });

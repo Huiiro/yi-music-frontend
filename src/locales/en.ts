@@ -9,6 +9,7 @@ export default {
     lyrics_font_size: 'Lyrics size',
     lyrics_font_alt: 'Font size',
     display_type_alt: 'Display mode',
+    immerse_mode_alt: 'Immerse mode',
     fullscreen_alt: 'Toggle fullscreen',
     close_alt: 'Close',
     track_cover_alt: 'Album cover',
