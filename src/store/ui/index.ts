@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import {defineStore} from 'pinia'
 
 export const useUIStore = defineStore('ui', {
     state: () => ({
@@ -26,8 +26,8 @@ export const useUIStore = defineStore('ui', {
             const nextIndex = Math.min(
                 state.lyricFontSizeIndex + 1,
                 state.fontSizeOptions.length - 1
-            );
-            return state.fontSizeOptions[nextIndex];
+            )
+            return state.fontSizeOptions[nextIndex]
         },
 
         nextLyricFontSizeClass: (state) =>
@@ -40,8 +40,8 @@ export const useUIStore = defineStore('ui', {
             const nextIndex = Math.min(
                 state.lyricFontSizeIndex + 1,
                 state.leadingOptions.length - 1
-            );
-            return state.leadingOptions[nextIndex];
+            )
+            return state.leadingOptions[nextIndex]
         }
     },
     actions: {
@@ -49,27 +49,27 @@ export const useUIStore = defineStore('ui', {
          * colors
          */
         setMainColor(color: string) {
-            this.mainColor = color;
+            this.mainColor = color
         },
         setGradientColors(top: string, bottom: string) {
-            this.topColor = top;
-            this.bottomColor = bottom;
+            this.topColor = top
+            this.bottomColor = bottom
         },
         toggleSliderVisible() {
-            this.showLyricSizeSlider = !this.showLyricSizeSlider;
+            this.showLyricSizeSlider = !this.showLyricSizeSlider
         },
         toggleDisplayMode() {
             if (window.innerWidth < 768) {
                 // 小屏下 只支持两种切换方式
-                this.displayMode = (this.displayMode + 1) % 2;
+                this.displayMode = (this.displayMode + 1) % 2
             } else {
                 // 常规模式 支持三种方式切换
-                this.displayMode = (this.displayMode + 1) % 3;
+                this.displayMode = (this.displayMode + 1) % 3
             }
         },
         toggleImmerseMode() {
-            this.immerseMode = !this.immerseMode;
-            console.log(this.immerseMode);
+            this.immerseMode = !this.immerseMode
         }
-    }
-});
+    },
+    persist: true
+})

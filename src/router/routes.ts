@@ -11,16 +11,16 @@ export const constRoutes = [
         redirect: '/404'
     },
     {
-        name: '404',
-        path: '/404',
-        meta: {},
-        component: () => import('@/views/404.vue')
-    },
-    {
         path: '/',
         name: 'layout',
         component: () => import('@/components/layout/Index.vue'),
         children: [
+            {
+                name: '404',
+                path: '/404',
+                meta: {},
+                component: () => import('@/views/404.vue')
+            },
             {
                 path: '/song',
                 name: "Song",

@@ -1,41 +1,41 @@
 <!-- 音量控制组件 -->
 <script setup lang="ts">
-import {computed} from 'vue';
-import {usePlayStore} from '@/store/play';
-import {useI18n} from 'vue-i18n';
+import {computed} from 'vue'
+import {usePlayStore} from '@/store/play'
+import {useI18n} from 'vue-i18n'
 
-import volumeHigh from '@/assets/svg/volume/volume-high.svg';
-import volumeMiddle from '@/assets/svg/volume/volume-middle.svg';
-import volumeLow from '@/assets/svg/volume/volume-low.svg';
-import volumeMute from '@/assets/svg/volume/volume-mute.svg';
+import volumeHigh from '@/assets/svg/volume/volume-high.svg'
+import volumeMiddle from '@/assets/svg/volume/volume-middle.svg'
+import volumeLow from '@/assets/svg/volume/volume-low.svg'
+import volumeMute from '@/assets/svg/volume/volume-mute.svg'
 
-const playStore = usePlayStore();
-const {t} = useI18n();
+const playStore = usePlayStore()
+const {t} = useI18n()
 
 const volumeIcon = computed(() => {
-  const vol = playStore.muted ? 0 : playStore.volume;
-  if (vol === 0) return volumeMute;
-  if (vol <= 30) return volumeLow;
-  if (vol <= 70) return volumeMiddle;
-  return volumeHigh;
-});
+  const vol = playStore.muted ? 0 : playStore.volume
+  if (vol === 0) return volumeMute
+  if (vol <= 30) return volumeLow
+  if (vol <= 70) return volumeMiddle
+  return volumeHigh
+})
 
 // 滑块显示值，静音时显示0
 const sliderValue = computed({
   get: () => (playStore.muted ? 0 : playStore.volume),
   set: (val: number) => {
-    playStore.setVolume(val);
+    playStore.setVolume(val)
     if (val === 0) {
-      playStore.setMuted(true);
+      playStore.setMuted(true)
     } else {
-      playStore.setMuted(false);
+      playStore.setMuted(false)
     }
   }
-});
+})
 
 // 点击图标切换静音
 const toggleMute = () => {
-  playStore.toggleMute();
+  playStore.toggleMute()
 }
 </script>
 

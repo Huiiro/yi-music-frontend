@@ -1,15 +1,15 @@
 <!-- 歌曲菜单栏组件 -->
 <script setup lang="ts">
 defineProps<{
-  icon: string
-  label: string
+  icon: string,
+  label: string,
 }>()
 
 const emit = defineEmits<{
-  (e: 'click'): void
+  (e: 'click'): void,
 }>()
 
-function handleClick() {
+const handleClick = () => {
   emit('click')
 }
 </script>

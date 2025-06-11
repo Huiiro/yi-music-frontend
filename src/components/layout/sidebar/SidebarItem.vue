@@ -1,12 +1,12 @@
 <!-- 侧边栏组件 -->
 <script setup lang="ts">
-import defaultCover from '@/assets/svg/default/default-cover.svg';
+import defaultCover from '@/assets/svg/default/default-cover.svg'
 
 const props = defineProps<{
-  title: string;
-  image?: string;
-  active?: boolean;
-}>();
+  title: string,
+  image?: string,
+  active?: boolean,
+}>()
 
 </script>
 

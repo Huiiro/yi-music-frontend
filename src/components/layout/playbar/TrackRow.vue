@@ -1,16 +1,20 @@
+<!-- 播放列表歌曲 item 组件 -->
 <script setup lang="ts">
-import drag from '@/assets/svg/common/drag-handle.svg';
-import deleteLight from '@/assets/svg/common/delete-light.svg';
-import defaultCover from '@/assets/svg/default/default-cover.svg';
+import drag from '@/assets/svg/common/drag-handle.svg'
+import deleteLight from '@/assets/svg/common/delete-light.svg'
+import defaultCover from '@/assets/svg/default/default-cover.svg'
+import {useI18n} from 'vue-i18n'
 
 defineProps<{
   track: any,
   index: number,
   isCurrent: boolean,
-  shuffle?: boolean
+  shuffle?: boolean,
 }>()
 
 defineEmits(['click', 'remove'])
+
+const {t} = useI18n();
 </script>
 
 <template>
@@ -34,10 +38,10 @@ defineEmits(['click', 'remove'])
           class="w-10 h-10 rounded object-cover bg-gray-600"
       />
       <div class="text-sm truncate">
-        <p class="font-medium truncate max-w-[180px]">{{ track.title || '未知标题' }}</p>
+        <p class="font-medium truncate max-w-[180px]">{{ track.title || t('unknown_title') }}</p>
         <p class="text-xs text-gray-400">
-          {{ track.artist || '未知歌手' }}
-          <span v-if="isCurrent" class="text-green-400 ml-2">播放中</span>
+          {{ track.artist || t('unknown_artist') }}
+          <span v-if="isCurrent" class="text-green-400 ml-2">{{ t('is_playing') }}</span>
         </p>
       </div>
     </div>

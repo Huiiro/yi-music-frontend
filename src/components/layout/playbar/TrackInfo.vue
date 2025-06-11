@@ -1,12 +1,12 @@
 <!-- 歌曲信息组件 -->
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import {defineProps} from 'vue'
 
 const props = defineProps<{
-  cover: string;
-  title: string;
-  artist: string;
-}>();
+  cover: string,
+  title: string,
+  artist: string,
+}>()
 </script>
 
 <template>

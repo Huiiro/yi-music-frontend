@@ -1,69 +1,69 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
-import {useSidebarStore} from "@/store/sidebar";
-import {useI18n} from 'vue-i18n';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useSidebarStore} from "@/store/sidebar"
+import {useI18n} from 'vue-i18n'
 
-import SidebarItem from './SidebarItem.vue';
+import SidebarItem from './SidebarItem.vue'
 
-import homeIcon from '@/assets/svg/menu/home.svg';
-import library from '@/assets/svg/menu/library.svg';
-import list from '@/assets/svg/menu/list.svg';
-import more from '@/assets/svg/menu/more-horizontal.svg';
-import settings from '@/assets/svg/menu/settings.svg';
-import history from '@/assets/svg/menu/history.svg';
-import musicIcon from '@/assets/svg/menu/song.svg';
-import artistIcon from '@/assets/svg/menu/artist.svg';
-import albumIcon from '@/assets/svg/menu/album.svg';
+import homeIcon from '@/assets/svg/menu/home.svg'
+import library from '@/assets/svg/menu/library.svg'
+import list from '@/assets/svg/menu/list.svg'
+import more from '@/assets/svg/menu/more-horizontal.svg'
+import settings from '@/assets/svg/menu/settings.svg'
+import history from '@/assets/svg/menu/history.svg'
+import musicIcon from '@/assets/svg/menu/song.svg'
+import artistIcon from '@/assets/svg/menu/artist.svg'
+import albumIcon from '@/assets/svg/menu/album.svg'
 
-const sidebarStore = useSidebarStore();
-const router = useRouter();
-const route = useRoute();
-const {t} = useI18n();
+const sidebarStore = useSidebarStore()
+const router = useRouter()
+const route = useRoute()
+const {t} = useI18n()
 
-const defaultWidth = sidebarStore.defaultWidth;
-let isResizing = false;
+const defaultWidth = sidebarStore.defaultWidth
+let isResizing = false
 
 //Data
 const sectionA = computed(() => [
   {title: t('song'), path: '/song', icon: musicIcon},
   {title: t('artist'), path: '/artist', icon: artistIcon},
   {title: t('album'), path: '/album', icon: albumIcon},
-]);
-const sectionB = ref<{ title: string; path: string }[]>([]);
-const sectionC = ref<{ title: string; path: string }[]>([]);
+])
+const sectionB = ref<{ title: string; path: string }[]>([])
+const sectionC = ref<{ title: string; path: string }[]>([])
 const sectionD = computed(() => [
   {title: t('history'), path: '/history', icon: history},
   {title: t('settings'), path: '/settings', icon: settings},
-]);
+])
 
 //@ts-ignore
 function startResize(e: MouseEvent) {
-  isResizing = true;
-  document.body.style.cursor = 'col-resize';
+  isResizing = true
+  document.body.style.cursor = 'col-resize'
 }
 
 function stopResize() {
-  isResizing = false;
-  document.body.style.cursor = '';
+  isResizing = false
+  document.body.style.cursor = ''
 }
 
 function handleMouseMove(e: MouseEvent) {
   if (isResizing) {
-    const newWidth = Math.min(Math.max(e.clientX, defaultWidth), window.innerWidth / 2);
-    sidebarStore.setWidth(newWidth);
+    const newWidth = Math.min(Math.max(e.clientX, defaultWidth), window.innerWidth / 2)
+    sidebarStore.setWidth(newWidth)
   }
 }
 
 function isActive(path: string) {
-  return route.path === path || route.path.startsWith(path + '/');
+  return route.path === path || route.path.startsWith(path + '/')
 }
 
 function handleClick(path: string) {
   if (route.path !== path) {
-    router.push(path);
+    router.push(path)
   }
-  sidebarStore.setActivePath(path);
+  sidebarStore.setActivePath(path)
 }
 
 async function fetchLibrary() {
@@ -71,7 +71,7 @@ async function fetchLibrary() {
     {title: '曲库 A', path: '/library/a'},
     {title: '曲库 B', path: '/library/b'},
     {title: '曲库 C', path: '/library/c'},
-  ];
+  ]
   sectionC.value = [
     {title: '歌单 A', path: '/playlist/1'},
     {title: '歌单 B', path: '/playlist/2'},
@@ -79,20 +79,20 @@ async function fetchLibrary() {
     {title: '歌单 D', path: '/playlist/4'},
     {title: '歌单 E', path: '/playlist/5'},
     {title: '歌单 F', path: '/playlist/6'},
-  ];
+  ]
 }
 
 onMounted(() => {
-  fetchLibrary();
-  window.addEventListener('mousemove', handleMouseMove);
-  window.addEventListener('mouseup', stopResize);
-  sidebarStore.setActivePath(route.path);
-});
+  fetchLibrary()
+  window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('mouseup', stopResize)
+  sidebarStore.setActivePath(route.path)
+})
 
 onBeforeUnmount(() => {
-  window.removeEventListener('mousemove', handleMouseMove);
-  window.removeEventListener('mouseup', stopResize);
-});
+  window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('mouseup', stopResize)
+})
 </script>
 
 <template>

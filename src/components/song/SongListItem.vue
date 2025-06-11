@@ -1,63 +1,72 @@
+<!-- 歌曲列表 item 组件 -->
 <script setup lang="ts">
-import {ref, computed} from 'vue';
-import {useClickOutside} from '@/utils/useClickOutside';
-import {useI18n} from 'vue-i18n';
+import {ref, computed} from 'vue'
+import {useClickOutside} from '@/utils/useClickOutside'
+import {useI18n} from 'vue-i18n'
 
-import more from '@/assets/svg/menu/more-horizontal.svg';
-import play from '@/assets/svg/play/play.svg';
-import plus from '@/assets/svg/common/plus.svg';
-import detail from '@/assets/svg/common/detail.svg';
-import artist from '@/assets/svg/menu/artist.svg';
-import album from '@/assets/svg/menu/album.svg';
-import deleteWarning from '@/assets/svg/common/delete-red.svg';
-import defaultCover from '@/assets/svg/default/default-cover.svg';
+import more from '@/assets/svg/menu/more-horizontal.svg'
+import play from '@/assets/svg/play/play.svg'
+import plus from '@/assets/svg/common/plus.svg'
+import detail from '@/assets/svg/common/detail.svg'
+import artist from '@/assets/svg/menu/artist.svg'
+import album from '@/assets/svg/menu/album.svg'
+import deleteWarning from '@/assets/svg/common/delete-red.svg'
+import defaultCover from '@/assets/svg/default/default-cover.svg'
 
-import SongMenuItem from '@/components/song/SongMenuItem.vue';
-import {useMenuDirection} from '@/utils/useMenuDirection.ts';
-
-const {t} = useI18n();
+import SongMenuItem from '@/components/song/SongMenuItem.vue'
+import {useMenuDirection} from '@/utils/useMenuDirection.ts'
 
 const props = defineProps<{
-  index: number;
-  title: string;
-  artist: string;
-  album: string;
-  duration: string;
-  cover: string | null;
-  activeMenuIndex: number | null;
+  index: number,
+  title: string,
+  artist: string,
+  album: string,
+  duration: string,
+  cover: string | null,
+  activeMenuIndex: number | null,
   multiSelectMode?: boolean,
-  selected?: boolean
-}>();
+  selected?: boolean,
+  searchKeyword?: string,
+}>()
 
 const emit = defineEmits<{
-  (e: 'openMenu', index: number): void;
-  (e: 'closeMenu'): void;
-  (e: 'playSong', index: number): void;
-  (e: 'toggleSelect'): void;
-}>();
+  (e: 'openMenu', index: number): void,
+  (e: 'closeMenu'): void,
+  (e: 'playSong', index: number): void,
+  (e: 'toggleSelect'): void,
+}>()
 
-const menuRef = ref<HTMLElement | null>(null);
-const isMenuOpen = computed(() => props.activeMenuIndex === props.index);
+const {t} = useI18n()
+const menuRef = ref<HTMLElement | null>(null)
+const isMenuOpen = computed(() => props.activeMenuIndex === props.index)
+const {menuDirection} = useMenuDirection(menuRef, isMenuOpen)
 
-const {menuDirection} = useMenuDirection(menuRef, isMenuOpen);
+// 高亮查询关键词
+const highlightText = (text: string): string => {
+  if (!props.searchKeyword) return text
+
+  const escapedKeyword = props.searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(${escapedKeyword})`, 'ig')
+  return text.replace(regex, '<mark class="bg-yellow-400 text-black">$1</mark>')
+}
 
 // 外部点击关闭菜单
 useClickOutside(menuRef, () => {
-  if (isMenuOpen.value) emit('closeMenu');
-});
+  if (isMenuOpen.value) emit('closeMenu')
+})
 
 // 打开菜单
 const toggleMenu = () => {
   if (isMenuOpen.value) {
-    emit('closeMenu');
+    emit('closeMenu')
   } else {
-    emit('openMenu', props.index);
+    emit('openMenu', props.index)
   }
-};
+}
 
 // 双击播放
 const handleDoubleClick = () => {
-  emit('playSong', props.index);
+  emit('playSong', props.index)
 }
 
 </script>
@@ -91,15 +100,13 @@ const handleDoubleClick = () => {
 
       <!-- 歌曲信息 -->
       <div class="flex flex-col flex-1 truncate">
-        <div class="font-medium truncate">{{ props.title }}</div>
+        <div class="font-medium truncate" v-html="highlightText(props.title)"/>
         <div class="text-sm text-gray-400 truncate">
-          <RouterLink :to="`/artist/${props.artist}`" class="hover:underline hover:text-white">
-            {{ props.artist }}
-          </RouterLink>
+          <RouterLink :to="`/artist/${props.artist}`" class="hover:underline hover:text-white"
+                      v-html="highlightText(props.artist)"/>
           &nbsp;-&nbsp;
-          <RouterLink :to="`/album/${props.album}`" class="hover:underline hover:text-white">
-            {{ props.album }}
-          </RouterLink>
+          <RouterLink :to="`/album/${props.album}`" class="hover:underline hover:text-white"
+                      v-html="highlightText(props.album)"/>
         </div>
       </div>
 

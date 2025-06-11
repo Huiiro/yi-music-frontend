@@ -1,214 +1,214 @@
 <script setup lang="ts">
-import {computed, nextTick, ref, watch} from 'vue';
-import {usePlayStore} from '@/store/play';
-import {useAppStore} from '@/store/app';
-import {useUIStore} from '@/store/ui';
-import {useI18n} from 'vue-i18n';
+import {computed, nextTick, ref, watch} from 'vue'
+import {usePlayStore} from '@/store/play'
+import {useAppStore} from '@/store/app'
+import {useUIStore} from '@/store/ui'
+import {useI18n} from 'vue-i18n'
 
-import Lyrics from '@/components/layout/playbar/Lyrics.vue';
-import TrackInfo from '@/components/layout/playbar/TrackInfo.vue';
-import VolumeControl from '@/components/layout/playbar/Volume.vue';
-import PlayerControls from '@/components/layout/playbar/PlayerControls.vue';
+import Lyrics from '@/components/layout/playbar/Lyrics.vue'
+import TrackInfo from '@/components/layout/playbar/TrackInfo.vue'
+import VolumeControl from '@/components/layout/playbar/Volume.vue'
+import PlayerControls from '@/components/layout/playbar/PlayerControls.vue'
 
-import playlist from '@/assets/svg/control/playlist.svg';
-import font from '@/assets/svg/menu/font.svg';
-import display from '@/assets/svg/menu/display.svg';
-import fullscreen from '@/assets/svg/menu/fullscreen.svg';
-import close from '@/assets/svg/menu/close.svg';
-import play from '@/assets/svg/play/play.svg';
-import pause from '@/assets/svg/play/pause.svg';
-import next from '@/assets/svg/play/next.svg';
-import light from '@/assets/svg/common/light.svg';
+import playlist from '@/assets/svg/control/playlist.svg'
+import font from '@/assets/svg/menu/font.svg'
+import display from '@/assets/svg/menu/display.svg'
+import fullscreen from '@/assets/svg/menu/fullscreen.svg'
+import close from '@/assets/svg/menu/close.svg'
+import play from '@/assets/svg/play/play.svg'
+import pause from '@/assets/svg/play/pause.svg'
+import next from '@/assets/svg/play/next.svg'
+import light from '@/assets/svg/common/light.svg'
 
-import draggable from 'vuedraggable';
-import {useClickOutside} from '@/utils/useClickOutside.ts';
-import {findCurrentLineIndex} from '@/utils/lyricParser.ts';
-import {formatTime} from '@/utils/time.ts';
-import TrackRow from "@/components/layout/playbar/TrackRow.vue";
+import draggable from 'vuedraggable'
+import {useClickOutside} from '@/utils/useClickOutside.ts'
+import {findCurrentLineIndex} from '@/utils/lyricParser.ts'
+import {formatTime} from '@/utils/time.ts'
+import TrackRow from "@/components/layout/playbar/TrackRow.vue"
 
-const playStore = usePlayStore();
-const appStore = useAppStore();
-const uiStore = useUIStore();
-const {t} = useI18n();
+const playStore = usePlayStore()
+const appStore = useAppStore()
+const uiStore = useUIStore()
+const {t} = useI18n()
 
-const showPlayer = ref(playStore.showPlayer);
+const showPlayer = ref(playStore.showPlayer)
 
 // 大屏渐变色
 const backgroundStyle = computed(() => ({
   backgroundImage: `linear-gradient(to bottom, ${uiStore.topColor}, ${uiStore.bottomColor})`,
-}));
+}))
 
 // 播放方式I18n
 const playModeTitle = computed(() => t(`playMode.${playStore.playMode}`))
 
 // 字体大小I18n
 const sizeLabel = computed(() => {
-  const labels = [t('small'), t('medium'), t('large'), t('x_large')];
-  return labels[uiStore.lyricFontSizeIndex];
-});
+  const labels = [t('small'), t('medium'), t('large'), t('x_large')]
+  return labels[uiStore.lyricFontSizeIndex]
+})
 
 // 切换播放
 const togglePlay = () => {
-  playStore.togglePlay();
+  playStore.togglePlay()
 }
 
 // 上一首
 const prevTrack = () => {
-  playStore.prevTrack();
+  playStore.prevTrack()
 }
 
 // 下一首
 const nextTrack = () => {
-  playStore.nextTrack();
+  playStore.nextTrack()
 }
 
 // 拖动进度条事件
 const onProgressChange = (value: number) => {
-  playStore.setCurrentTime(value);
+  playStore.setCurrentTime(value)
 }
 
 // 切换大屏
 const togglePlayer = () => {
-  showPlayer.value = !showPlayer.value;
+  showPlayer.value = !showPlayer.value
 }
 
 // 关闭大屏
 const closePlayer = () => {
-  showPlayer.value = false;
+  showPlayer.value = false
 }
 
 // 切换全屏
 const toggleFullScreen = () => {
-  const doc = document as any;
-  const docEl = document.documentElement as any;
+  const doc = document as any
+  const docEl = document.documentElement as any
 
   if (!doc.fullscreenElement && !doc.webkitFullscreenElement && !doc.mozFullScreenElement && !doc.msFullscreenElement) {
     // 进入全屏
     if (docEl.requestFullscreen) {
-      docEl.requestFullscreen();
+      docEl.requestFullscreen()
     } else if (docEl.webkitRequestFullscreen) {
-      docEl.webkitRequestFullscreen();
+      docEl.webkitRequestFullscreen()
     } else if (docEl.mozRequestFullScreen) {
-      docEl.mozRequestFullScreen();
+      docEl.mozRequestFullScreen()
     } else if (docEl.msRequestFullscreen) {
-      docEl.msRequestFullscreen();
+      docEl.msRequestFullscreen()
     }
   } else {
     // 退出全屏
     if (doc.exitFullscreen) {
-      doc.exitFullscreen();
+      doc.exitFullscreen()
     } else if (doc.webkitExitFullscreen) {
-      doc.webkitExitFullscreen();
+      doc.webkitExitFullscreen()
     } else if (doc.mozCancelFullScreen) {
-      doc.mozCancelFullScreen();
+      doc.mozCancelFullScreen()
     } else if (doc.msExitFullscreen) {
-      doc.msExitFullscreen();
+      doc.msExitFullscreen()
     }
   }
 }
 
 // 字体大小滑块 Ref
-const sliderWrapperRef = ref<HTMLElement | null>(null);
+const sliderWrapperRef = ref<HTMLElement | null>(null)
 
 // 点击外部时隐藏滑块
 useClickOutside(sliderWrapperRef, () => {
   if (uiStore.showLyricSizeSlider) {
-    uiStore.showLyricSizeSlider = false;
+    uiStore.showLyricSizeSlider = false
   }
-});
+})
 
 // 简易模式下获取当前高亮歌词
 const currentLyricText = computed(() => {
-  return playStore.currentTrack.lrc[playStore.currentLyricIndex]?.text || '';
-});
+  return playStore.currentTrack.lrc[playStore.currentLyricIndex]?.text || ''
+})
 
 // 简易模式下获取下行高亮歌词
 const nextLyricText = computed(() =>
     playStore.currentTrack.lrc[playStore.currentLyricIndex + 1]?.text || ''
-);
+)
 
 // 监听简易模式下歌词滚动变化
 watch(
     () => playStore.currentTime,
     (newTime) => {
-      const lyrics = playStore.currentTrack.lrc || [];
-      const newIndex = findCurrentLineIndex(lyrics, newTime);
+      const lyrics = playStore.currentTrack.lrc || []
+      const newIndex = findCurrentLineIndex(lyrics, newTime)
       if (playStore.currentLyricIndex !== newIndex) {
-        playStore.currentLyricIndex = newIndex;
+        playStore.currentLyricIndex = newIndex
       }
     }
-);
+)
 
 // 播放列表抽屉
-const drawer = ref(false);
+const drawer = ref(false)
 
 const isCurrent = (id: number) => {
-  const currentTrack = getCurrentList()[playStore.currentIndex];
-  return currentTrack?.id === id;
-};
+  const currentTrack = getCurrentList()[playStore.currentIndex]
+  return currentTrack?.id === id
+}
 
 const playTrackById = (id: number) => {
-  playStore.playSongById(id, true);
-};
+  playStore.playSongById(id, true)
+}
 
 const getCurrentList = () =>
-    playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+    playStore.playMode === 3 ? playStore.shuffleList : playStore.playList
 
 const removeTrackById = (id: number) => {
-  playStore.removeTrackFromPlaylist(id);
-};
+  playStore.removeTrackFromPlaylist(id)
+}
 
 const clearList = () => {
-  playStore.clearPlayList();
-};
+  playStore.clearPlayList()
+}
 
 // 自动滚动定位当前播放项
-const listContainer = ref<HTMLElement | null>(null);
+const listContainer = ref<HTMLElement | null>(null)
 
 const scrollToCurrent = async () => {
-  await nextTick();
-  const currentId = getCurrentList()?.[playStore.currentIndex]?.id;
-  if (!currentId || !listContainer.value) return;
+  await nextTick()
+  const currentId = getCurrentList()?.[playStore.currentIndex]?.id
+  if (!currentId || !listContainer.value) return
 
-  const el = listContainer.value.querySelector(`[data-id="${currentId}"]`);
+  const el = listContainer.value.querySelector(`[data-id="${currentId}"]`)
   if (el && el instanceof HTMLElement) {
-    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    el.scrollIntoView({behavior: 'smooth', block: 'center'})
   }
-};
+}
 
 // 拖动实现
-const draggedTrackId = ref<number | null>(null);
+const draggedTrackId = ref<number | null>(null)
 
 const listRef = computed({
   get() {
-    return playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
+    return playStore.playMode === 3 ? playStore.shuffleList : playStore.playList
   },
   set(val) {
     if (playStore.playMode === 3) {
-      playStore.shuffleList = val;
+      playStore.shuffleList = val
     } else {
-      playStore.playList = val;
+      playStore.playList = val
     }
   }
-});
+})
 
 const onDragStart = () => {
-  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
-  draggedTrackId.value = list[playStore.currentIndex]?.id ?? null;
-};
+  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList
+  draggedTrackId.value = list[playStore.currentIndex]?.id ?? null
+}
 
 const onDragEnd = () => {
-  if (!draggedTrackId.value) return;
+  if (!draggedTrackId.value) return
 
-  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList;
-  const newIndex = list.findIndex(t => t.id === draggedTrackId.value);
+  const list = playStore.playMode === 3 ? playStore.shuffleList : playStore.playList
+  const newIndex = list.findIndex(t => t.id === draggedTrackId.value)
 
   if (newIndex !== -1) {
-    playStore.currentIndex = newIndex;
+    playStore.currentIndex = newIndex
   }
 
-  draggedTrackId.value = null;
-};
+  draggedTrackId.value = null
+}
 </script>
 
 <template>
@@ -363,7 +363,8 @@ const onDragEnd = () => {
             <img
                 :src="playStore.currentTrack.cover"
                 alt=""
-                class="w-64 h-64 md:w-92 md:h-92 lg:w-[30rem] lg:h-[30rem] max-w-full rounded object-cover bg-gray-800 mb-6"
+                class="w-64 h-64 md:w-92 md:h-92 lg:w-[30rem] lg:h-[30rem]
+                max-w-full rounded object-cover bg-gray-800 mb-6"
             />
             <div class="text-2xl font-semibold mb-1 truncate max-w-full text-center">
               {{ playStore.currentTrack.title }}
@@ -526,7 +527,7 @@ const onDragEnd = () => {
       <!--播放列表控制-->
       <button
           class="text-gray-400 hover:text-blue-500 transition text-lg select-none"
-          @click.stop="drawer = true;"
+          @click.stop="drawer = true"
           :title="t('playlist_alt')"
       >
         <img :src="playlist" :alt="t('playlist_alt')" class="w-6 h-6"/>

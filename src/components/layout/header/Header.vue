@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
-import {useSidebarStore} from '@/store/sidebar';
-import {useAppStore} from '@/store/app';
-import {useI18n} from 'vue-i18n';
+import {ref, watch} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useSidebarStore} from '@/store/sidebar'
+import {useAppStore} from '@/store/app'
+import {useI18n} from 'vue-i18n'
 
-const sidebarStore = useSidebarStore();
-const appStore = useAppStore();
-const router = useRouter();
-const route = useRoute();
-const {t} = useI18n();
+import next from '@/assets/svg/common/next.svg'
+import back from '@/assets/svg/common/back.svg'
+import search from '@/assets/svg/common/search.svg'
+import plus from '@/assets/svg/common/plus.svg'
+import user from '@/assets/svg/common/user.svg'
+import LangSwitcher from '@/components/layout/header/LangSwitcher.vue'
 
-import next from '@/assets/svg/common/next.svg';
-import back from '@/assets/svg/common/back.svg';
-import search from '@/assets/svg/common/search.svg';
-import plus from '@/assets/svg/common/plus.svg';
-import user from '@/assets/svg/common/user.svg';
-import LangSwitcher from "@/components/layout/header/LangSwitcher.vue";
+const sidebarStore = useSidebarStore()
+const appStore = useAppStore()
+const router = useRouter()
+const route = useRoute()
+const {t} = useI18n()
 
 /**
  * 监听路由变化，移动端自动收起侧边栏
  */
 watch(() => route.path, () => {
   if (appStore.isSmallScreen) {
-    sidebarStore.toggleVisibility(false);
-    sidebarStore.setWidth(0);
+    sidebarStore.toggleVisibility(false)
+    sidebarStore.setWidth(0)
   }
-});
+})
 
 /**
  * 展开/收起侧边栏
  */
 const toggleSidebar = () => {
-  sidebarStore.toggleVisibility();
+  sidebarStore.toggleVisibility()
   if (sidebarStore.visible) {
-    sidebarStore.setWidth(sidebarStore.defaultWidth);
+    sidebarStore.setWidth(sidebarStore.defaultWidth)
   } else {
-    sidebarStore.setWidth(0);
+    sidebarStore.setWidth(0)
   }
 }
 
@@ -44,21 +44,21 @@ const toggleSidebar = () => {
  * 路由跳转 -> 向后
  */
 const goBack = () => {
-  router.back();
+  router.back()
 }
 
 /**
  * 路由跳转 -> 向前
  */
 const goForward = () => {
-  router.forward();
+  router.forward()
 }
 
 /**
  * 上传文件
  */
 const uploadLocalFiles = () => {
-  fileInputRef.value?.click();
+  fileInputRef.value?.click()
 }
 
 /**
@@ -72,29 +72,31 @@ const openUserInfo = () => {
  * 聚合搜索函数
  */
 const searchAggregation = () => {
+  //TODO
   console.log('user search')
 }
 
-const fileInputRef = ref<HTMLInputElement | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
 const handleFileChange = async (event: Event) => {
-  const files = (event.target as HTMLInputElement).files;
-  if (!files || files.length === 0) return;
+  const files = (event.target as HTMLInputElement).files
+  if (!files || files.length === 0) return
 
-  console.log(files);
+  console.log(files)
 
-  const formData = new FormData();
+  const formData = new FormData()
   for (const file of files) {
-    formData.append('files', file);
+    formData.append('files', file)
   }
 
   try {
+    //TODO
     console.log(formData)
-    //await uploadMusicFiles(formData);
+    //await uploadMusicFiles(formData)
     // 成功后刷新音乐列表，或提示
-    console.log('上传成功');
+    console.log('上传成功')
   } catch (error) {
-    console.error('上传失败', error);
+    console.error('上传失败', error)
   }
 }
 </script>
@@ -143,12 +145,15 @@ const handleFileChange = async (event: Event) => {
           class="hidden"
           @change="handleFileChange"
       />
+
       <!--用户信息-->
       <button @click="openUserInfo" class="text-xl hover:text-blue-400">
         <img :src="user" alt="t('user_info_alt')" class="w-5 h-5"/>
       </button>
+
       <!--欢迎文字-->
       <!--<p> {{ t('user_welcome_prefix') }} Admin</p>-->
+
       <!--语言管理-->
       <LangSwitcher/>
     </div>

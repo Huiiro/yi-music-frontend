@@ -67,5 +67,9 @@ export default {
     sort_by_artist: '按艺术家排序',
     sort_by_album: '按专辑排序',
     sort_by_duration: '按时长排序',
+    unknown_title: '未知标题',
+    unknown_artist: '未知歌手',
+    unknown_album: '未知专辑',
+    is_playing: '播放中',
 }
 

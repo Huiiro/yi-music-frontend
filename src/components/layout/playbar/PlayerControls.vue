@@ -1,41 +1,41 @@
 <!-- 播放控制条组件 -->
 <script setup lang="ts">
-import {defineEmits, defineProps} from 'vue';
+import {defineEmits, defineProps} from 'vue'
 
-import prev from '@/assets/svg/play/prev.svg';
-import next from '@/assets/svg/play/next.svg';
-import play from '@/assets/svg/play/play.svg';
-import pause from '@/assets/svg/play/pause.svg';
+import prev from '@/assets/svg/play/prev.svg'
+import next from '@/assets/svg/play/next.svg'
+import play from '@/assets/svg/play/play.svg'
+import pause from '@/assets/svg/play/pause.svg'
 
-import {useAppStore} from '@/store/app';
-import {useI18n} from 'vue-i18n';
-import {formatTime} from '@/utils/time.ts';
+import {useAppStore} from '@/store/app'
+import {useI18n} from 'vue-i18n'
+import {formatTime} from '@/utils/time.ts'
 
-const appStore = useAppStore();
-const {t} = useI18n();
+const appStore = useAppStore()
+const {t} = useI18n()
 
 const props = defineProps<{
   currentTrack: {
-    cover: string;
-    title: string;
-    artist: string;
-    duration: number;
-  };
-  isPlaying: boolean;
-  currentTime: number;
-}>();
+    cover: string,
+    title: string,
+    artist: string,
+    duration: number,
+  }
+  isPlaying: boolean,
+  currentTime: number,
+}>()
 
 const emit = defineEmits<{
-  (e: 'togglePlay'): void;
-  (e: 'prevTrack'): void;
-  (e: 'nextTrack'): void;
-  (e: 'progressChange', value: number): void;
-}>();
+  (e: 'togglePlay'): void,
+  (e: 'prevTrack'): void,
+  (e: 'nextTrack'): void,
+  (e: 'progressChange', value: number): void,
+}>()
 
 function onProgressChange(event: Event) {
-  const target = event.target as HTMLInputElement;
-  const value = Number(target.value);
-  emit('progressChange', value);
+  const target = event.target as HTMLInputElement
+  const value = Number(target.value)
+  emit('progressChange', value)
 }
 
 </script>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import Sidebar from '@/components/layout/sidebar/SideBar.vue';
-import Header from '@/components/layout/header/Header.vue';
-import PlayBar from '@/components/layout/playbar/PlayBar.vue';
-import Main from "@/components/layout/main/Main.vue";
-import {onMounted} from "vue";
+import Sidebar from '@/components/layout/sidebar/SideBar.vue'
+import Header from '@/components/layout/header/Header.vue'
+import PlayBar from '@/components/layout/playbar/PlayBar.vue'
+import Main from "@/components/layout/main/Main.vue"
+import {onMounted} from "vue"
 
-import {usePlayStore} from "@/store/play";
+import {usePlayStore} from "@/store/play"
 
-const playStore = usePlayStore();
+const playStore = usePlayStore()
 
 onMounted(() => {
-  playStore.checkInit();
+  playStore.checkInit()
 })
 </script>
 

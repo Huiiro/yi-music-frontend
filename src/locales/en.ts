@@ -66,5 +66,9 @@ export default {
     sort_by_title: 'Sort by title',
     sort_by_artist: 'Sort by artist',
     sort_by_album: 'Sort by album',
-    sort_by_duration: 'Sort by duration'
+    sort_by_duration: 'Sort by duration',
+    unknown_title: 'Unknown title',
+    unknown_artist: 'Unknown artist',
+    unknown_album: 'Unknown album',
+    is_playing: 'Playing',
 }

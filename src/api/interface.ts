@@ -1,34 +1,32 @@
-// src/types/track.ts
-
 export interface AudioTrack {
-    id: number;
-    title: string;
-    artist: string;
-    album: string;
-    duration: number;
-    coverUrl: string;
-    audioUrl: string;
-    lrc?: string;
+    id: number
+    title: string
+    artist: string
+    album: string
+    duration: number
+    coverUrl: string
+    audioUrl: string
+    lrc?: string
 }
 
 export interface LyricLine {
-    time: number;
-    text: string;
+    time: number
+    text: string
 }
 
 export interface songEntity {
-    id: number;
-    cover: string;
-    title: string;
-    artist: string;
-    album: string;
-    duration: string;
+    id: number
+    cover: string
+    title: string
+    artist: string
+    album: string
+    duration: string
 }
 
 export interface pageEntity {
-    current: number;
-    size: number;
-    total: number;
+    current: number
+    size: number
+    total: number
 }
 
 export interface SortEntity {
@@ -37,9 +35,11 @@ export interface SortEntity {
 }
 
 export interface SearchEntity {
-
+    searchKey: string
 }
 
 export interface SourceEntity {
-
+    type: string
+    search?: string
+    id?: number
 }

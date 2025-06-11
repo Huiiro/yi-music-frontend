@@ -29,6 +29,8 @@ declare module 'vue' {
     SidebarItem: typeof import('./src/components/layout/sidebar/SidebarItem.vue')['default']
     SongItem: typeof import('./src/components/song/SongItem.vue')['default']
     SongListHeader: typeof import('./src/components/song/SongListHeader.vue')['default']
+    SongListItem: typeof import('./src/components/song/SongListItem.vue')['default']
+    SongListView: typeof import('./src/components/song/SongListView.vue')['default']
     SongMenuItem: typeof import('./src/components/song/SongMenuItem.vue')['default']
     TrackInfo: typeof import('./src/components/layout/playbar/TrackInfo.vue')['default']
     TrackRow: typeof import('./src/components/layout/playbar/TrackRow.vue')['default']

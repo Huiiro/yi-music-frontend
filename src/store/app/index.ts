@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import {defineStore} from 'pinia'
 
 export const useAppStore = defineStore('app', {
     state: () => ({
@@ -9,7 +9,7 @@ export const useAppStore = defineStore('app', {
     }),
     actions: {
         updateScreenSize() {
-            this.isSmallScreen = window.innerWidth < 768;
+            this.isSmallScreen = window.innerWidth < 768
         },
         setLocale(lang: string) {
             this.locale = lang
@@ -17,4 +17,4 @@ export const useAppStore = defineStore('app', {
         },
     },
     persist: true
-});
+})

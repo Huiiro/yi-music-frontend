@@ -1,37 +1,41 @@
 <template>
   <div class="empty">
     <el-empty
-        :image-size="520"
-        :image="empty"
+        :image-size="220"
+        :image="notFound"
         description="您访问的页面或资源不存在，即将自动返回首页"
         style="margin-top: 80px"
     >
       <p>如果没有自动返回首页，您也可以点击按钮手动返回</p>
       <el-button @click="goBack">回到首页</el-button>
     </el-empty>
-
   </div>
 </template>
 
 <script setup lang="ts">
-import {useRouter} from "vue-router";
-import {onMounted} from "vue";
-import empty from '@/assets/pageNotFound.jpg';
+import {useRouter} from "vue-router"
+import {onActivated, onMounted} from "vue"
+import notFound from '@/assets/svg/response/notFound.svg'
 
-const router = useRouter();
+const router = useRouter()
 const goBack = () => {
-  router.push('/song');
+  router.replace({path: '/song', replace: true})
 }
 
 const autoGoBack = () => {
   setTimeout(() => {
-    goBack();
-  }, 5000);
-};
+    goBack()
+  }, 2000)
+}
 
 onMounted(() => {
-  autoGoBack();
-});
+  autoGoBack()
+})
+
+// keep-alive 缓存 每次 active 重新触发
+onActivated(() => {
+  autoGoBack()
+})
 </script>
 
 <style scoped>

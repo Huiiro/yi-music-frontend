@@ -3,7 +3,7 @@ import {ref, onMounted} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useAppStore} from '@/store/app'
 
-import localeIcon from '@/assets/svg/common/locale.svg';
+import localeIcon from '@/assets/svg/common/locale.svg'
 
 const {locale} = useI18n()
 const appStore = useAppStore()

@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import {defineStore} from 'pinia'
 
 export const useSidebarStore = defineStore('sidebar', {
     state: () => ({
@@ -9,18 +9,18 @@ export const useSidebarStore = defineStore('sidebar', {
     }),
     actions: {
         setActivePath(path: string) {
-            this.activePath = path;
+            this.activePath = path
         },
         toggleVisibility(force?: boolean) {
             if (typeof force === 'boolean') {
-                this.visible = force;
+                this.visible = force
             } else {
-                this.visible = !this.visible;
+                this.visible = !this.visible
             }
         },
         setWidth(width: number) {
-            this.width = width;
+            this.width = width
         },
     },
     persist: true
-});
+})

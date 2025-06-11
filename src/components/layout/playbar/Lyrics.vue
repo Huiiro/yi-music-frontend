@@ -1,40 +1,40 @@
 <!-- 歌词组件 -->
 <script setup lang="ts">
-import {ref, watch, computed, watchEffect} from 'vue';
-import {usePlayStore} from '@/store/play';
-import {useUIStore} from "@/store/ui";
-import {findCurrentLineIndex} from '@/utils/lyricParser';
+import {ref, watch, computed, watchEffect} from 'vue'
+import {usePlayStore} from '@/store/play'
+import {useUIStore} from "@/store/ui"
+import {findCurrentLineIndex} from '@/utils/lyricParser'
 
-const playStore = usePlayStore();
-const uiStore = useUIStore();
+const playStore = usePlayStore()
+const uiStore = useUIStore()
 
-const lyrics = computed(() => playStore.currentTrack.lrc || []);
-const currentTime = computed(() => playStore.currentTime);
+const lyrics = computed(() => playStore.currentTrack.lrc || [])
+const currentTime = computed(() => playStore.currentTime)
 const currentLyricIndex = computed(() =>
     findCurrentLineIndex(lyrics.value, currentTime.value)
-);
+)
 
-const lyricContainer = ref<HTMLDivElement | null>(null);
-const lyricLineRefs = ref<HTMLElement[]>([]);
+const lyricContainer = ref<HTMLDivElement | null>(null)
+const lyricLineRefs = ref<HTMLElement[]>([])
 
-const setLyricRef = (el: Element | null, index: number) => {
+const setLyricRef = (el: Element | any, index: number) => {
   if (el instanceof HTMLElement) {
-    lyricLineRefs.value[index] = el;
+    lyricLineRefs.value[index] = el
   }
 }
 
 const scrollToCurrentLyric = (index: number) => {
-  const lineEl = lyricLineRefs.value[index];
-  const container = lyricContainer.value;
+  const lineEl = lyricLineRefs.value[index]
+  const container = lyricContainer.value
   if (lineEl && container) {
-    const offsetTop = lineEl.offsetTop;
-    const containerHeight = container.clientHeight;
-    const lineHeight = lineEl.clientHeight;
+    const offsetTop = lineEl.offsetTop
+    const containerHeight = container.clientHeight
+    const lineHeight = lineEl.clientHeight
 
     container.scrollTo({
       top: offsetTop - containerHeight / 2 + lineHeight / 2,
       behavior: 'smooth',
-    });
+    })
   }
 }
 
@@ -42,18 +42,18 @@ const scrollToCurrentLyric = (index: number) => {
  * 监听歌词索引
  */
 watch(currentLyricIndex, (newIndex) => {
-  scrollToCurrentLyric(newIndex);
-});
+  scrollToCurrentLyric(newIndex)
+})
 
 /**
  * 监听用户事件 触发时高亮行自动局中
  */
 watchEffect(() => {
-  const mode = uiStore.displayMode;
-  const fontSize = uiStore.lyricFontSizeIndex;
-  console.debug(`watch: playMode ${mode}, fontSieMode ${fontSize}`);
-  scrollToCurrentLyric(currentLyricIndex.value);
-});
+  const mode = uiStore.displayMode
+  const fontSize = uiStore.lyricFontSizeIndex
+  console.debug(`watch: playMode ${mode}, fontSieMode ${fontSize}`)
+  scrollToCurrentLyric(currentLyricIndex.value)
+})
 
 </script>
 
