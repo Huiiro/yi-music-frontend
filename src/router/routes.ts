@@ -34,10 +34,22 @@ export const constRoutes = [
                 component: () => import('@/views/Artist.vue')
             },
             {
+                path: '/artist/detail',
+                name: "ArtistDetail",
+                meta: {title: '歌手详情'},
+                component: () => import('@/views/ArtistDetail.vue')
+            },
+            {
                 path: '/album',
                 name: "Album",
                 meta: {title: '专辑'},
                 component: () => import('@/views/Album.vue')
+            },
+            {
+                path: '/album/detail',
+                name: "AlbumDetail",
+                meta: {title: '专辑详情'},
+                component: () => import('@/views/AlbumDetail.vue')
             },
             {
                 path: '/library/:id',

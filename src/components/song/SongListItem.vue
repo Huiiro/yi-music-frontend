@@ -15,6 +15,7 @@ import defaultCover from '@/assets/svg/default/default-cover.svg'
 
 import SongMenuItem from '@/components/song/SongMenuItem.vue'
 import {useMenuDirection} from '@/utils/useMenuDirection.ts'
+import {useRoute} from "vue-router";
 
 const props = defineProps<{
   index: number,
@@ -40,6 +41,7 @@ const {t} = useI18n()
 const menuRef = ref<HTMLElement | null>(null)
 const isMenuOpen = computed(() => props.activeMenuIndex === props.index)
 const {menuDirection} = useMenuDirection(menuRef, isMenuOpen)
+const route = useRoute()
 
 // 高亮查询关键词
 const highlightText = (text: string): string => {
@@ -68,6 +70,26 @@ const toggleMenu = () => {
 const handleDoubleClick = () => {
   emit('playSong', props.index)
 }
+
+
+const handleClickAlbumDetail = (e: MouseEvent) => {
+  const targetPath = '/album/detail';
+  const targetQuery = {
+    albumName: props.album,
+    artistName: props.artist,
+    albumCover: props.cover,
+  };
+
+  const isSameRoute =
+      route.path === targetPath &&
+      route.query.albumName === targetQuery.albumName &&
+      route.query.artistName === targetQuery.artistName &&
+      route.query.albumCover === targetQuery.albumCover;
+
+  if (isSameRoute) {
+    e.preventDefault();
+  }
+};
 
 </script>
 
@@ -102,10 +124,17 @@ const handleDoubleClick = () => {
       <div class="flex flex-col flex-1 truncate">
         <div class="font-medium truncate" v-html="highlightText(props.title)"/>
         <div class="text-sm text-gray-400 truncate">
-          <RouterLink :to="`/artist/${props.artist}`" class="hover:underline hover:text-white"
+          <!--todo-->
+          <RouterLink :to="`/artist/detail/${props.artist}`" class="hover:underline hover:text-white"
                       v-html="highlightText(props.artist)"/>
           &nbsp;-&nbsp;
-          <RouterLink :to="`/album/${props.album}`" class="hover:underline hover:text-white"
+          <RouterLink :to="{ path: `/album/detail`, query: {
+                                albumName: props.album,
+                                artistName: props.artist,
+                                albumCover: props.cover,
+                              }}"
+                      @click="handleClickAlbumDetail"
+                      class="hover:underline hover:text-white"
                       v-html="highlightText(props.album)"/>
         </div>
       </div>

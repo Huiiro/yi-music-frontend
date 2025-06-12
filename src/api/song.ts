@@ -1,24 +1,6 @@
 import request from '@/utils/request.ts'
-import qs from 'qs'
-import type {pageEntity, SearchEntity, songEntity, SortEntity, SourceEntity} from '@/api/interface.ts'
+import type {pageEntity, SearchEntity, SortEntity, SourceEntity} from '@/api/interface.ts'
 
-
-/**
- * 获取歌曲列表
- * @param song
- * @param page
- * @deprecated
- */
-export const getSongList = (song: songEntity | null, page: pageEntity) =>
-    request.get('/song/list', {
-        params: {
-            ...(song || {}),
-            ...page
-        },
-        paramsSerializer: function (params) {
-            return qs.stringify(params, {arrayFormat: 'comma'})
-        }
-    })
 
 /**
  * 获取所有歌曲至播放列表

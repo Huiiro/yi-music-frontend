@@ -76,7 +76,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="bg-gray-900 text-white border-b border-gray-700">
+  <div class="text-white border-b border-gray-700">
     <!-- 顶部主操作行 -->
     <div class="flex items-center justify-between px-4 py-3">
       <!-- 左侧：多选 -->

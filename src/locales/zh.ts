@@ -71,5 +71,8 @@ export default {
     unknown_artist: '未知歌手',
     unknown_album: '未知专辑',
     is_playing: '播放中',
+    loading: '加载中...',
+    no_songs: '暂无歌曲',
+    song_count: '首',
 }
 

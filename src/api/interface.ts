@@ -40,6 +40,14 @@ export interface SearchEntity {
 
 export interface SourceEntity {
     type: string
-    search?: string
+    album?: string
+    artist?: string
     id?: number
+}
+
+export interface AlbumEntity {
+    albumName: string
+    artistName: string
+    albumCover?: string
+    songCount: number
 }

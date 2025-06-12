@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AlbumItem: typeof import('./src/components/album/AlbumItem.vue')['default']
     B2: typeof import('./src/components/layout/playbar/b2.vue')['default']
     Backend: typeof import('./src/components/layout/playbar/backend.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']

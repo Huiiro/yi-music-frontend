@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue"
-import {aggregationSearch, aggregationSort, getSongList2Playlist} from "@/api/song.ts"
-import {usePlayStore} from "@/store/play"
-import {useI18n} from "vue-i18n"
+import {computed, onMounted, ref} from 'vue'
+import {aggregationSearch, aggregationSort, getSongList2Playlist} from '@/api/song.ts'
+import {usePlayStore} from '@/store/play'
+import {useI18n} from 'vue-i18n'
 
-import SongListItem from "@/components/song/SongListItem.vue"
-import type {songEntity} from "@/api/interface.ts"
-import SongListHeader from "@/components/song/SongListHeader.vue"
+import SongListItem from '@/components/song/SongListItem.vue'
+import type {songEntity} from '@/api/interface.ts'
+import SongListHeader from '@/components/song/SongListHeader.vue'
+import {CONSTANTS} from '@/plugins/consts.ts'
 
 const props = defineProps<{
   source: {
     type: string
-    search?: string
+    album?: string
+    artist?: string
     id?: number
   },
 }>()
@@ -29,7 +31,7 @@ const noMore = ref(false)
 const page = ref({
   total: 0,
   current: 1,
-  size: 1000,
+  size: CONSTANTS.QUERY_PAGE_SIZE,
   pages: 1
 })
 
@@ -59,13 +61,14 @@ const load = async (resort: boolean | null, search: boolean | null) => {
   loading.value = true
 
   let res: any
+
   if (search) {
     res = await aggregationSearch(
         {searchKey: searchText.value},
         props.source,
         page.value
     )
-  } else {
+  } else if (resort) {
     res = await aggregationSort(
         {sortType: sortType.value, sortOrder: sortOrder.value},
         props.source,
@@ -73,6 +76,7 @@ const load = async (resort: boolean | null, search: boolean | null) => {
     )
   }
 
+  // TypeError data check ignore
   const result = res.data
 
   if (result?.data?.length) {

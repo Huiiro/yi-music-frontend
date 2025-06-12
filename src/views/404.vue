@@ -19,7 +19,9 @@ import notFound from '@/assets/svg/response/notFound.svg'
 
 const router = useRouter()
 const goBack = () => {
-  router.replace({path: '/song', replace: true})
+  // 回退上级替代回退首页
+  // router.replace({path: '/song', replace: true})
+  router.back({replace: true})
 }
 
 const autoGoBack = () => {

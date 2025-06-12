@@ -71,4 +71,7 @@ export default {
     unknown_artist: 'Unknown artist',
     unknown_album: 'Unknown album',
     is_playing: 'Playing',
+    loading: 'Loading...',
+    no_songs: 'NO songs',
+    song_count: ' Songs',
 }
