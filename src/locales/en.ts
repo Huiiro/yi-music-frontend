@@ -74,4 +74,11 @@ export default {
     loading: 'Loading...',
     no_songs: 'NO songs',
     song_count: ' Songs',
+    cover_size_alt: 'size',
+    cover_size: {
+        small: 'small',
+        medium: 'medium',
+        large: 'large',
+        over_size: 'oversize'
+    },
 }

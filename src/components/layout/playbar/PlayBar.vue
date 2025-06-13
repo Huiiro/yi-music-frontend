@@ -490,7 +490,7 @@ const onDragEnd = () => {
     <div class="flex items-center gap-4 ml-auto z-10 h-full" @click.stop>
       <!-- 小屏模式- 播放进度条 -->
       <div class="text-xs text-gray-200" v-if="appStore.isSmallScreen && !showPlayer">
-        <p>{{ formatTime(playStore.currentTime) }} / {{ formatTime(playStore.currentTrack.duration) }}</p>
+        <!--<p>{{ formatTime(playStore.currentTime) }} / {{ formatTime(playStore.currentTrack.duration) }}</p>-->
       </div>
 
       <!-- 小屏模式- 播放控制按钮 -->

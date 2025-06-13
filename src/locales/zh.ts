@@ -74,5 +74,12 @@ export default {
     loading: '加载中...',
     no_songs: '暂无歌曲',
     song_count: '首',
+    cover_size_alt: '尺寸',
+    cover_size: {
+        small: '小',
+        medium: '中',
+        large: '大',
+        over_size: '超大'
+    },
 }
 

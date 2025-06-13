@@ -51,3 +51,9 @@ export interface AlbumEntity {
     albumCover?: string
     songCount: number
 }
+
+export interface ArtistEntity {
+    artistName: string
+    albumCover?: string
+    songCount: number
+}

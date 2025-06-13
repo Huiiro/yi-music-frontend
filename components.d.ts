@@ -8,7 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AlbumHeader: typeof import('./src/components/album/AlbumHeader.vue')['default']
     AlbumItem: typeof import('./src/components/album/AlbumItem.vue')['default']
+    ArtistHeader: typeof import('./src/components/artist/ArtistHeader.vue')['default']
+    ArtistItem: typeof import('./src/components/artist/ArtistItem.vue')['default']
     B2: typeof import('./src/components/layout/playbar/b2.vue')['default']
     Backend: typeof import('./src/components/layout/playbar/backend.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']

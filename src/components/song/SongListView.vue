@@ -2,7 +2,6 @@
 import {computed, onMounted, ref} from 'vue'
 import {aggregationSearch, aggregationSort, getSongList2Playlist} from '@/api/song.ts'
 import {usePlayStore} from '@/store/play'
-import {useI18n} from 'vue-i18n'
 
 import SongListItem from '@/components/song/SongListItem.vue'
 import type {songEntity} from '@/api/interface.ts'
@@ -18,8 +17,6 @@ const props = defineProps<{
   },
 }>()
 
-
-const {t} = useI18n()
 const playStore = usePlayStore()
 const songList = ref<songEntity[]>([])
 
@@ -189,8 +186,7 @@ onMounted(async () => {
     />
     <div
         v-infinite-scroll="load"
-        class="divide-y divide-gray-700  overflow-auto"
-        style="height: 100%"
+        class="h-full divide-y divide-gray-700 overflow-auto"
     >
       <SongListItem
           v-for="(song, i) in songList"
@@ -206,8 +202,6 @@ onMounted(async () => {
           @playSong="() => playSongById(song.id)"
           @toggleSelect="toggleSelect(song.id)"
       />
-      <div v-if="noMore" class="text-center py-4 text-gray-400">{{ t('no_more_content') }}</div>
     </div>
   </div>
-
 </template>

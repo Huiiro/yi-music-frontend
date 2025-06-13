@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
     <!-- 顶部主操作行 -->
     <div class="flex items-center justify-between px-4 py-3">
       <!-- 左侧：多选 -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 z-10">
         <button
             class="px-3 py-1 border border-gray-600 rounded text-sm hover:bg-gray-800 flex items-center gap-1"
             @click="emit('toggleMultiSelect')"
@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
               v-model="localSearchText"
               type="text"
               :placeholder="t('search_placeholder')"
-              class="px-2 py-1 pr-6 rounded bg-gray-800 border border-gray-600 text-sm focus:outline-none focus:border-blue-400 w-full"
+              class="px-2 py-1 pr-6 rounded border border-gray-600 text-sm focus:outline-none focus:border-blue-400 w-full"
           />
           <button
               v-if="localSearchText"
@@ -146,14 +146,14 @@ onBeforeUnmount(() => {
     <div v-if="multiSelectMode" class="flex items-center justify-between px-4 pb-3 text-sm">
       <div class="flex items-center gap-3">
         <!-- 全选 / 取消全选 -->
-        <button class="hover:text-yellow-400" @click="emit('toggleSelectAll')">
+        <button class="hover:text-yellow-400 z-10" @click="emit('toggleSelectAll')">
           {{ isAllSelected ? t('unselect_all') : t('select_all') }}
         </button>
 
         <!-- 批量播放 -->
         <button
             :disabled="selectedCount === 0"
-            class="flex items-center gap-1"
+            class="flex items-center gap-1 z-10"
             :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-blue-200' "
             @click="emit('batchPlay')"
         >
@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
         <!-- 批量添加 -->
         <button
             :disabled="selectedCount === 0"
-            class="flex items-center gap-1"
+            class="flex items-center gap-1 z-10"
             :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-green-200' "
             @click="emit('batchAdd')"
         >
@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
         <!-- 批量删除 -->
         <button
             :disabled="selectedCount === 0"
-            class="flex items-center gap-1 "
+            class="flex items-center gap-1 z-10"
             :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-red-200' "
             @click="emit('batchDelete')"
         >
@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
         </button>
 
         <!-- 已选中数量 -->
-        <span>
+        <span class="z-10">
           {{ t('selected') }} {{ selectedCount }} {{ t('selected_items') }}
         </span>
       </div>
