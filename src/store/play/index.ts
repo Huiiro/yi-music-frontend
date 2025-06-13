@@ -364,7 +364,8 @@ export const usePlayStore = defineStore('play', {
             } else {
                 // 正常模式下同步索引
                 this.shuffleList = []
-                this.currentIndex = 0
+                // fixed when refresh playlist index lose issue
+                //this.currentIndex = 0
             }
         },
 
