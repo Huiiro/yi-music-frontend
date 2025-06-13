@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
         <input
             v-model="localSearchText"
             type="text"
-            :placeholder="t('search_placeholder')"
+            :placeholder="t('search_album_placeholder')"
             class="px-2 py-1 pr-6 rounded border border-gray-600 text-sm focus:outline-none focus:border-blue-400 w-full bg-transparent"
         />
         <button

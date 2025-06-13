@@ -35,6 +35,7 @@ const bottomColor = ref('#070f22')
 const updateColors = () => {
   const img = coverRef.value
   if (img && img.complete) {
+    //@ts-ignore
     const {topColor: top, bottomColor: bottom} = getImageTopBottomColors(img)
     topColor.value = top
     //bottomColor.value = bottom
@@ -62,7 +63,7 @@ watch(() => route.query, async (query) => {
       albumName.value = (query.albumName as string) || ''
       artistName.value = (query.artistName as string) || ''
       albumCover.value = (query.albumCover as string) || ''
-      songCount.value = (query.songCount as number) || 0
+      songCount.value = (query.songCount as any) || 0
 
       if (songCount.value < 1) {
         await fetchSongs()

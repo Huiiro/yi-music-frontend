@@ -3,6 +3,8 @@ export default {
     forward_alt: 'Forward',
     search_alt: 'Search',
     search_placeholder: 'Search music...',
+    search_album_placeholder: 'Search album...',
+    search_artist_placeholder: 'Search artist...',
     upload_file_alt: 'Upload file',
     user_info_alt: 'User profile',
     user_welcome_prefix: 'Welcome, ',

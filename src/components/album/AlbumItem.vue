@@ -33,9 +33,9 @@ const goToAlbumDetail = () => {
   >
     <div class="w-full aspect-square overflow-hidden rounded-xl shadow-md">
       <img
+          class="w-full h-full object-cover"
           :src="album.albumCover || defaultCover"
           alt="Album Cover"
-          class="w-full h-full object-cover"
       />
     </div>
 

@@ -33,6 +33,7 @@ const bottomColor = ref('#070f22')
 const updateColors = () => {
   const img = coverRef.value
   if (img && img.complete) {
+    //@ts-ignore
     const {topColor: top, bottomColor: bottom} = getImageTopBottomColors(img)
     topColor.value = top
     //bottomColor.value = bottom
@@ -59,7 +60,7 @@ const fetchSongs = async () => {
 watch(() => route.query, (query) => {
       artistName.value = (query.artistName as string) || ''
       albumCover.value = (query.albumCover as string) || ''
-      songCount.value = (query.songCount as number) || 0
+      songCount.value = (query.songCount as any) || 0
 
       if (songCount.value < 1) {
         fetchSongs()
@@ -92,7 +93,7 @@ watch(() => route.query, (query) => {
           crossorigin="anonymous"
           :src="albumCover ? albumCover : defaultArtist"
           alt=""
-          class="w-36 h-36 rounded-xl shadow-md object-cover shrink-0"
+          class="w-36 h-36 rounded-full shadow-md object-cover shrink-0"
       />
       <div class="flex flex-col justify-center min-w-0 w-full">
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 truncate">

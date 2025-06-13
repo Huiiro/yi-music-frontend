@@ -1,24 +1,3 @@
-<template>
-  <div
-      class="group flex flex-col items-center text-center transition transform hover:scale-105"
-      @click="goToArtistDetail"
-  >
-    <img
-        :src="artist.albumCover || defaultArtist"
-        alt="artist cover"
-        class="w-32 h-32 rounded-full object-cover shadow-md mb-3"
-    />
-
-    <div class="text-lg font-semibold text-white truncate max-w-[8rem] hover:underline hover:text-white">
-      {{ artist.artistName }}
-    </div>
-
-    <div class="text-sm text-gray-400">
-      {{ artist.songCount }}{{ t('song_count') }}
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import {defineProps} from 'vue'
 import {useRouter} from 'vue-router'
@@ -31,6 +10,7 @@ const router = useRouter()
 
 const props = defineProps<{
   artist: ArtistEntity
+  coverSize: number
 }>()
 
 const goToArtistDetail = () => {
@@ -44,3 +24,26 @@ const goToArtistDetail = () => {
   })
 }
 </script>
+
+<template>
+  <div
+      class="w-full cursor-pointer transition-transform hover:scale-105"
+      @click="goToArtistDetail"
+  >
+    <div class="w-full aspect-square overflow-hidden rounded-xl shadow-md">
+      <img
+          class="w-full h-full object-cover rounded-full shadow-md mb-3"
+          :src="artist.albumCover || defaultArtist"
+          alt="artist cover"
+      />
+    </div>
+    <div class="mt-2 text-sm font-semibold text-white truncate">
+      {{ artist.artistName }}
+    </div>
+
+    <div class="text-xs text-gray-400 flex items-center gap-1 truncate">
+      {{ artist.songCount }}{{ t('song_count') }}
+    </div>
+  </div>
+</template>
+

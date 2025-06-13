@@ -3,6 +3,8 @@ export default {
     forward_alt: '前进',
     search_alt: '搜索',
     search_placeholder: '搜索音乐...',
+    search_album_placeholder: '搜索专辑...',
+    search_artist_placeholder: '搜索艺术家...',
     upload_file_alt: '上传文件',
     user_info_alt: '用户信息',
     user_welcome_prefix: '欢迎，',
