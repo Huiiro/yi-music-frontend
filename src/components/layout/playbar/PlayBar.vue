@@ -9,6 +9,7 @@ import Lyrics from '@/components/layout/playbar/Lyrics.vue'
 import TrackInfo from '@/components/layout/playbar/TrackInfo.vue'
 import VolumeControl from '@/components/layout/playbar/Volume.vue'
 import PlayerControls from '@/components/layout/playbar/PlayerControls.vue'
+import TrackRow from '@/components/layout/playbar/TrackRow.vue'
 
 import playlist from '@/assets/svg/control/playlist.svg'
 import font from '@/assets/svg/menu/font.svg'
@@ -23,7 +24,6 @@ import light from '@/assets/svg/common/light.svg'
 import draggable from 'vuedraggable'
 import {useClickOutside} from '@/utils/useClickOutside.ts'
 import {findCurrentLineIndex} from '@/utils/lyricParser.ts'
-import TrackRow from "@/components/layout/playbar/TrackRow.vue"
 
 const playStore = usePlayStore()
 const appStore = useAppStore()

@@ -15,7 +15,7 @@ import defaultCover from '@/assets/svg/default/default-cover.svg'
 
 import SongMenuItem from '@/components/song/SongMenuItem.vue'
 import {useMenuDirection} from '@/utils/useMenuDirection.ts'
-import {useRoute} from "vue-router";
+import {useRoute} from 'vue-router'
 
 const props = defineProps<{
   index: number,

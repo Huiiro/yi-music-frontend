@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import {onMounted} from 'vue'
 import Sidebar from '@/components/layout/sidebar/SideBar.vue'
 import Header from '@/components/layout/header/Header.vue'
 import PlayBar from '@/components/layout/playbar/PlayBar.vue'
-import Main from "@/components/layout/main/Main.vue"
-import {onMounted} from "vue"
-
-import {usePlayStore} from "@/store/play"
+import Main from '@/components/layout/main/Main.vue'
+import {usePlayStore} from '@/store/play'
 
 const playStore = usePlayStore()
 

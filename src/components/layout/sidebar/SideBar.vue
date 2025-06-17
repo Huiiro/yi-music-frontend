@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import {ElMessage} from 'element-plus'
+import {CONSTANTS} from '@/plugins/consts.ts'
 import {useRoute, useRouter} from 'vue-router'
 import {useSidebarStore} from '@/store/sidebar'
 import {useI18n} from 'vue-i18n'
 import {createSongListApi, getSongListCollection} from '@/api/songList.ts'
+import {createLibraryApi, getLibraryCollection} from '@/api/library.ts'
 import type {LibraryEntity, SongListEntity} from '@/api/interface.ts'
 
 import SidebarItem from './SidebarItem.vue'
@@ -21,8 +23,6 @@ import musicIcon from '@/assets/svg/menu/song.svg'
 import artistIcon from '@/assets/svg/menu/artist.svg'
 import albumIcon from '@/assets/svg/menu/album.svg'
 import plus from '@/assets/svg/common/plus.svg'
-import {createLibraryApi, getLibraryCollection} from "@/api/library.ts";
-import {CONSTANTS} from "@/plugins/consts.ts";
 
 const sidebarStore = useSidebarStore()
 const router = useRouter()
