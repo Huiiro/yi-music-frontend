@@ -7,6 +7,8 @@ import i18n from './plugins/i18n.ts'
 
 import {Buffer} from 'buffer';
 
+import 'element-plus/dist/index.css'
+
 (window as any).Buffer = Buffer;
 
 const app = createApp(App)

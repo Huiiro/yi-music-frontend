@@ -83,5 +83,16 @@ export default {
         large: '大',
         over_size: '超大'
     },
+    confirm: '确认',
+    cancel: '取消',
+    create_song_list: '创建歌单',
+    create_song_list_placeholder: '请输入歌单名称',
+    create_song_list_success: '歌单创建成功',
+    error_song_list_name_required: '歌单名称不能为空',
+    error_song_list_name_too_long: '歌单名称不能超过 {max} 个字符',
+    create_library: '创建曲库',
+    create_library_placeholder: '请输入曲库名称',
+    create_library_success: '曲库创建成功',
+    error_library_name_required: '曲库名称不能为空',
+    error_library_name_too_long: '曲库名称不能超过 {max} 个字符',
 }
-

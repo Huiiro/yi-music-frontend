@@ -23,7 +23,6 @@ import light from '@/assets/svg/common/light.svg'
 import draggable from 'vuedraggable'
 import {useClickOutside} from '@/utils/useClickOutside.ts'
 import {findCurrentLineIndex} from '@/utils/lyricParser.ts'
-import {formatTime} from '@/utils/time.ts'
 import TrackRow from "@/components/layout/playbar/TrackRow.vue"
 
 const playStore = usePlayStore()

@@ -83,4 +83,16 @@ export default {
         large: 'large',
         over_size: 'oversize'
     },
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    create_song_list: 'Create Playlist',
+    create_song_list_placeholder: 'Enter playlist name',
+    create_song_list_success: 'Playlist created successfully',
+    error_song_list_name_required: 'Playlist name cannot be empty',
+    error_song_list_name_too_long: 'Playlist name cannot exceed {max} characters',
+    create_library: 'Create Library',
+    create_library_placeholder: 'Enter library name',
+    create_library_success: 'Library created successfully',
+    error_library_name_required: 'Library name cannot be empty',
+    error_library_name_too_long: 'Library name cannot exceed {max} characters'
 }

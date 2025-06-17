@@ -57,3 +57,17 @@ export interface ArtistEntity {
     albumCover?: string
     songCount: number
 }
+
+export interface SongListEntity {
+    songListId: number
+    songListName: string
+    songListCover: string
+    songListDesc: string
+}
+
+export interface LibraryEntity {
+    libraryId: number
+    libraryName: string
+    libraryCover: string
+    libraryDesc: string
+}

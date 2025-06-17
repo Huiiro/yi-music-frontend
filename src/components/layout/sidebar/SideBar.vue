@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import {ElMessage} from 'element-plus'
 import {useRoute, useRouter} from 'vue-router'
-import {useSidebarStore} from "@/store/sidebar"
+import {useSidebarStore} from '@/store/sidebar'
 import {useI18n} from 'vue-i18n'
+import {createSongListApi, getSongListCollection} from '@/api/songList.ts'
+import type {LibraryEntity, SongListEntity} from '@/api/interface.ts'
 
 import SidebarItem from './SidebarItem.vue'
+import CreateSongListDialog from '@/components/layout/sidebar/CreateSongListDialog.vue'
+import CreateLibraryDialog from '@/components/layout/sidebar/CreateLibraryDialog.vue'
 
 import homeIcon from '@/assets/svg/menu/home.svg'
 import library from '@/assets/svg/menu/library.svg'
@@ -15,6 +20,9 @@ import history from '@/assets/svg/menu/history.svg'
 import musicIcon from '@/assets/svg/menu/song.svg'
 import artistIcon from '@/assets/svg/menu/artist.svg'
 import albumIcon from '@/assets/svg/menu/album.svg'
+import plus from '@/assets/svg/common/plus.svg'
+import {createLibraryApi, getLibraryCollection} from "@/api/library.ts";
+import {CONSTANTS} from "@/plugins/consts.ts";
 
 const sidebarStore = useSidebarStore()
 const router = useRouter()
@@ -38,52 +46,88 @@ const sectionD = computed(() => [
 ])
 
 //@ts-ignore
-function startResize(e: MouseEvent) {
+const startResize = (e: MouseEvent) => {
   isResizing = true
   document.body.style.cursor = 'col-resize'
 }
 
-function stopResize() {
+const stopResize = () => {
   isResizing = false
   document.body.style.cursor = ''
 }
 
-function handleMouseMove(e: MouseEvent) {
+const handleMouseMove = (e: MouseEvent) => {
   if (isResizing) {
     const newWidth = Math.min(Math.max(e.clientX, defaultWidth), window.innerWidth / 2)
     sidebarStore.setWidth(newWidth)
   }
 }
 
-function isActive(path: string) {
+const isActive = (path: string) => {
   return route.path === path || route.path.startsWith(path + '/')
 }
 
-function handleClick(path: string) {
+const handleClick = (path: string) => {
   if (route.path !== path) {
     router.push(path)
   }
   sidebarStore.setActivePath(path)
 }
 
-async function fetchLibrary() {
-  sectionB.value = [
-    {title: '曲库 A', path: '/library/a'},
-    {title: '曲库 B', path: '/library/b'},
-    {title: '曲库 C', path: '/library/c'},
-  ]
-  sectionC.value = [
-    {title: '歌单 A', path: '/playlist/1'},
-    {title: '歌单 B', path: '/playlist/2'},
-    {title: '歌单 C', path: '/playlist/3'},
-    {title: '歌单 D', path: '/playlist/4'},
-    {title: '歌单 E', path: '/playlist/5'},
-    {title: '歌单 F', path: '/playlist/6'},
-  ]
+const fetchLibrary = async () => {
+  const libraryData = await getLibraryCollection()
+  sectionB.value = libraryData.data.map((item: any) => ({
+    title: item.libraryName,
+    path: `/library/${item.libraryId}`
+  }))
+}
+
+const fetchSongList = async () => {
+  const songListData = await getSongListCollection()
+  sectionC.value = songListData.data.map((item: any) => ({
+    title: item.songListName,
+    path: `/playlist/${item.songListId}`
+  }))
+}
+
+const songListDialogVisible = ref(false)
+const libraryDialogVisible = ref(false)
+
+const handleCreateSongList = async (name: string) => {
+  let songListEntity = {
+    songListName: name
+  } as SongListEntity
+  const result = await createSongListApi(songListEntity)
+  if (result.code === 0) {
+    ElMessage({
+      message: t('create_song_list_success'),
+      type: 'success',
+      plain: true,
+      duration: CONSTANTS.MESSAGE_BOX_DURATION_SHORT,
+    })
+    await fetchSongList()
+  }
+}
+
+const handleCreateLibrary = async (name: string) => {
+  let libraryEntity = {
+    libraryName: name
+  } as LibraryEntity
+  const result = await createLibraryApi(libraryEntity)
+  if (result.code === 0) {
+    ElMessage({
+      message: t('create_library_success'),
+      type: 'success',
+      plain: true,
+      duration: CONSTANTS.MESSAGE_BOX_DURATION_SHORT,
+    })
+    await fetchLibrary()
+  }
 }
 
 onMounted(() => {
   fetchLibrary()
+  fetchSongList()
   window.addEventListener('mousemove', handleMouseMove)
   window.addEventListener('mouseup', stopResize)
   sidebarStore.setActivePath(route.path)
@@ -96,6 +140,17 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+
+  <CreateSongListDialog
+      v-model="songListDialogVisible"
+      @confirm="handleCreateSongList"
+  />
+
+  <CreateLibraryDialog
+      v-model="libraryDialogVisible"
+      @confirm="handleCreateLibrary"
+  />
+
   <transition name="slide">
     <aside
         class="h-full bg-gray-900 text-white overflow-y-auto overflow-x-hidden relative select-none transform"
@@ -137,10 +192,13 @@ onBeforeUnmount(() => {
 
       <!-- Section B -->
       <div>
-        <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="library" :alt="t('menu_library')" class="w-4 h-4"/>
-          <span> {{ t('menu_library') }} </span>
-        </h2>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="flex items-center gap-1 text-sm text-gray-400">
+            <img :src="library" :alt="t('menu_library')" class="w-4 h-4"/>
+            <span> {{ t('menu_library') }} </span>
+          </h2>
+          <img :src="plus" alt="" class="w-4 h-4" @click="libraryDialogVisible = true"/>
+        </div>
         <ul class="space-y-1">
           <li v-for="item in sectionB" :key="item.title">
             <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
@@ -151,10 +209,13 @@ onBeforeUnmount(() => {
 
       <!-- Section C -->
       <div>
-        <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="list" :alt="t('menu_songList')" class="w-4 h-4"/>
-          <span>{{ t('menu_songList') }}</span>
-        </h2>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="flex items-center gap-1 text-sm text-gray-400">
+            <img :src="list" :alt="t('menu_songList')" class="w-4 h-4"/>
+            <span>{{ t('menu_songList') }}</span>
+          </h2>
+          <img :src="plus" alt="" class="w-4 h-4" @click="songListDialogVisible = true">
+        </div>
         <ul class="space-y-1">
           <li v-for="item in sectionC" :key="item.title">
             <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
@@ -203,4 +264,13 @@ aside::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
+
+::v-deep(.el-dialog) {
+  --el-dialog-bg-color: #1e293b;
+}
+
+::v-deep(.el-dialog__title) {
+  color: #fff;
+}
+
 </style>
