@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useAppStore} from '@/store/app'
 
@@ -7,8 +7,19 @@ import localeIcon from '@/assets/svg/common/locale.svg'
 
 const {locale} = useI18n()
 const appStore = useAppStore()
-
 const showDropdown = ref(false)
+
+const langMap = {
+  zh: '简体中文',
+  en: 'English',
+} as any
+
+const props = defineProps({
+  mode: {
+    type: String as () => 'short' | 'full',
+    default: 'short'
+  }
+})
 
 const toggleLang = (lang: string) => {
   appStore.setLocale(lang)
@@ -22,9 +33,14 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 }
 
+const displayLang = computed(() =>
+    props.mode === 'full' ? langMap[locale.value] || locale.value : locale.value.toUpperCase()
+)
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 })
+
 </script>
 
 <template>
@@ -33,8 +49,8 @@ onMounted(() => {
         class="flex items-center gap-x-1 text-white hover:text-blue-400 transition"
         @click="showDropdown = !showDropdown"
     >
-      <img :src="localeIcon" alt="" class="w-4 h-4"/>
-      <span class="leading-none">{{ locale.toUpperCase() }}</span>
+      <img v-if="mode == 'short'" :src="localeIcon" alt="" class="w-4 h-4"/>
+      <span class="leading-none">{{ displayLang }}</span>
     </button>
 
     <div
