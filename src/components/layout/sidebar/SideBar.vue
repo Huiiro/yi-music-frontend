@@ -10,19 +10,8 @@ import {createLibraryApi, getLibraryCollection} from '@/api/library.ts'
 import type {LibraryEntity, SongListEntity} from '@/api/interface.ts'
 
 import SidebarItem from './SidebarItem.vue'
-import CreateSongListDialog from '@/components/layout/sidebar/CreateSongListDialog.vue'
-import CreateLibraryDialog from '@/components/layout/sidebar/CreateLibraryDialog.vue'
-
-import homeIcon from '@/assets/svg/menu/home.svg'
-import library from '@/assets/svg/menu/library.svg'
-import list from '@/assets/svg/menu/list.svg'
-import more from '@/assets/svg/menu/more-horizontal.svg'
-import settings from '@/assets/svg/menu/settings.svg'
-import history from '@/assets/svg/menu/history.svg'
-import musicIcon from '@/assets/svg/menu/song.svg'
-import artistIcon from '@/assets/svg/menu/artist.svg'
-import albumIcon from '@/assets/svg/menu/album.svg'
-import plus from '@/assets/svg/common/plus.svg'
+import CreateSongListDialog from '@/components/layout/sidebar/dialog/CreateSongListDialog.vue'
+import CreateLibraryDialog from '@/components/layout/sidebar/dialog/CreateLibraryDialog.vue'
 
 const sidebarStore = useSidebarStore()
 const router = useRouter()
@@ -34,15 +23,15 @@ let isResizing = false
 
 //Data
 const sectionA = computed(() => [
-  {title: t('song'), path: '/song', icon: musicIcon},
-  {title: t('artist'), path: '/artist', icon: artistIcon},
-  {title: t('album'), path: '/album', icon: albumIcon},
+  {title: t('song'), path: '/song', icon: 'menu-song'},
+  {title: t('artist'), path: '/artist', icon: 'menu-artist'},
+  {title: t('album'), path: '/album', icon: 'menu-album'},
 ])
 const sectionB = ref<{ title: string; path: string }[]>([])
 const sectionC = ref<{ title: string; path: string }[]>([])
 const sectionD = computed(() => [
-  {title: t('history'), path: '/history', icon: history},
-  {title: t('settings'), path: '/settings', icon: settings},
+  {title: t('history'), path: '/history', icon: 'menu-history'},
+  {title: t('settings'), path: '/settings', icon: 'menu-settings'},
 ])
 
 //@ts-ignore
@@ -141,19 +130,20 @@ onBeforeUnmount(() => {
 
 <template>
 
+  <!-- 创建曲库 -->
+  <CreateLibraryDialog
+      v-model="libraryDialogVisible"
+      @confirm="handleCreateLibrary"
+  />
+  <!-- 创建歌单 -->
   <CreateSongListDialog
       v-model="songListDialogVisible"
       @confirm="handleCreateSongList"
   />
 
-  <CreateLibraryDialog
-      v-model="libraryDialogVisible"
-      @confirm="handleCreateLibrary"
-  />
-
   <transition name="slide">
     <aside
-        class="h-full bg-gray-900 text-white overflow-y-auto overflow-x-hidden relative select-none transform"
+        class="h-full bg-bg text-text no-bg-transition overflow-y-auto overflow-x-hidden relative select-none transform"
         :class="[
                   sidebarStore.visible ? 'translate-x-0' : '-translate-x-full',
                   isResizing ? '': 'transition-all duration-300 ease-in-out'
@@ -169,9 +159,9 @@ onBeforeUnmount(() => {
 
       <!-- Section A -->
       <div>
-        <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="homeIcon" :alt="t('menu_start')" class="w-4 h-4"/>
-          <span> {{ t('menu_start') }}</span>
+        <h2 class="flex items-center gap-1 text-sm mb-2">
+          <svgIcon name="menu-home" class-name="w-4 h-4 icon"/>
+          <span class="text-text-light"> {{ t('menu_start') }}</span>
         </h2>
         <ul class="space-y-1 text-sm">
           <li
@@ -180,55 +170,61 @@ onBeforeUnmount(() => {
               @click="handleClick(item.path)"
               :class="[
                 'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
-                isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
+                isActive(item.path) ? 'bg-menu-active' : 'hover:bg-menu-hover'
               ]"
           >
-            <img :src="item.icon" alt="" class="w-4 h-4"/>
+            <svgIcon :name="item.icon" class-name="w-4 h-4 icon"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>
-        <hr class="border-t border-gray-700 my-4"/>
+        <hr class="border-t border-border my-4"/>
       </div>
 
       <!-- Section B -->
       <div>
         <div class="flex items-center justify-between mb-2">
-          <h2 class="flex items-center gap-1 text-sm text-gray-400">
-            <img :src="library" :alt="t('menu_library')" class="w-4 h-4"/>
-            <span> {{ t('menu_library') }} </span>
+          <h2 class="flex items-center gap-1 text-sm">
+            <svgIcon name="menu-library" class-name="w-4 h-4 icon"/>
+            <span class="text-text-light"> {{ t('menu_library') }} </span>
           </h2>
-          <img :src="plus" alt="" class="w-4 h-4" @click="libraryDialogVisible = true"/>
+          <svgIcon name="common-plus"
+                   class="cursor-pointer hover:text-primary"
+                   class-name="w-4 h-4 icon"
+                   @click="libraryDialogVisible = true"/>
         </div>
         <ul class="space-y-1">
           <li v-for="item in sectionB" :key="item.title">
             <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
           </li>
         </ul>
-        <hr class="border-t border-gray-700 my-4"/>
+        <hr class="border-t border-border my-4"/>
       </div>
 
       <!-- Section C -->
       <div>
         <div class="flex items-center justify-between mb-2">
-          <h2 class="flex items-center gap-1 text-sm text-gray-400">
-            <img :src="list" :alt="t('menu_songList')" class="w-4 h-4"/>
-            <span>{{ t('menu_songList') }}</span>
+          <h2 class="flex items-center gap-1 text-sm">
+            <svgIcon name="menu-list" class-name="w-4 h-4 icon"/>
+            <span class="text-text-light"> {{ t('menu_songList') }}</span>
           </h2>
-          <img :src="plus" alt="" class="w-4 h-4" @click="songListDialogVisible = true">
+          <svgIcon name="common-plus"
+                   class="cursor-pointer hover:text-primary"
+                   class-name="w-4 h-4 icon"
+                   @click="songListDialogVisible = true"/>
         </div>
         <ul class="space-y-1">
           <li v-for="item in sectionC" :key="item.title">
             <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
           </li>
         </ul>
-        <hr class="border-t border-gray-700 my-4"/>
+        <hr class="border-t border-border my-4"/>
       </div>
 
       <!-- Section D -->
       <div>
-        <h2 class="flex items-center gap-1 text-sm text-gray-400 mb-2">
-          <img :src="more" :alt="t('menu_more')" class="w-4 h-4"/>
-          <span>{{ t('menu_more') }}</span>
+        <h2 class="flex items-center gap-1 text-text-light text-sm mb-2">
+          <svgIcon name="menu-more-horizontal" class-name="w-4 h-4 icon"/>
+          <span class="text-text-light"> {{ t('menu_more') }}</span>
         </h2>
         <ul class="space-y-1 text-sm">
           <li
@@ -237,10 +233,10 @@ onBeforeUnmount(() => {
               @click="handleClick(item.path)"
               :class="[
                 'rounded px-2 py-2 cursor-pointer flex items-center gap-2',
-                isActive(item.path) ? 'bg-blue-600' : 'hover:bg-blue-800'
+                isActive(item.path) ? 'bg-menu-active' : 'hover:bg-menu-hover'
               ]"
           >
-            <img :src="item.icon" alt="" class="w-4 h-4"/>
+            <svgIcon :name="item.icon" class-name="w-4 h-4 icon"/>
             <span>{{ item.title }}</span>
           </li>
         </ul>
@@ -264,13 +260,4 @@ aside::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
-
-::v-deep(.el-dialog) {
-  --el-dialog-bg-color: #1e293b;
-}
-
-::v-deep(.el-dialog__title) {
-  color: #fff;
-}
-
 </style>

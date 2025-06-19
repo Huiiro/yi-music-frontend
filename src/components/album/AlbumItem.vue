@@ -39,11 +39,11 @@ const goToAlbumDetail = () => {
       />
     </div>
 
-    <div class="mt-2 text-sm font-semibold text-white truncate">
+    <div class="mt-2 text-sm font-semibold text-text truncate">
       {{ album.albumName }}
     </div>
 
-    <div class="text-xs text-gray-400 flex items-center gap-1 truncate">
+    <div class="text-xs text-text-light flex items-center gap-1 truncate">
       <span>{{ album.songCount }} {{ t('song_count') }}</span>
       <span class="text-xs">•</span>
       <span class="truncate">{{ album.artistName }}</span>

@@ -1,8 +1,27 @@
+/*tailwind v4.x*/
 @import "tailwindcss";
+@import "./el.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-primary: ;
+    --color-bg: ;
+    --color-bg-light: ;
+    --color-bg-hover: ;
+    --color-bg-hover-light: ;
+    --color-text: ;
+    --color-text-lighter: ;
+    --color-text-light: ;
+    --color-text-hover: ;
+    --color-border: ;
+    --color-menu-active: ;
+    --color-menu-hover: ;
+    --color-icon: ;
+    --color-icon-light: ;
+    --el-dialog-bg-color: ;
+    --el-dialog-title-color: ;
+}
 
 html, body {
     height: 100%;
@@ -13,4 +32,53 @@ html, body {
 #app {
     height: 100%;
 }
+
+/* 禁止所有颜色过渡 */
+.no-bg-transition {
+    transition-property: transform, box-shadow, opacity !important;
+}
+
+
+:root {
+    --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-bg: oklch(98.5% 0.001 106.423);  /* stone-50 (原暗色的text色) */
+    --color-bg-light: oklch(96% 0.005 110);  /* 稍暗的白色 */
+    --color-bg-hover: oklch(90% 0.008 110);  /* 浅灰色悬停 */
+    --color-bg-hover-light: oklch(85% 0.03 256.802); /* 浅灰色悬停 */
+    --color-text: oklch(21% 0.034 264.665);  /* grey-900 (原暗色的bg色) */
+    --color-text-lighter: oklch(0.364 0 89.876); /* grey-300 */
+    --color-text-light: oklch(45% 0.02 260);  /* 中灰色文字 */
+    --color-text-hover: oklch(30% 0.18 254.624);  /* 深蓝色悬停 */
+    --color-border: oklch(85% 0.01 260);  /* 浅灰色边框 */
+    --color-menu-active: oklch(80% 0.15 262.881);  /* 浅蓝色激活状态 */
+    --color-menu-hover: oklch(90% 0.1 265.638);  /* 非常浅的蓝色悬停 */
+    --color-icon: oklch(20% 0.03 260);  /* 深灰色图标 */
+    --color-icon-light: oklch(1 0 1);/* white */
+    --el-dialog-bg-color: oklch(98.5% 0.001 106.423); /* 浅背景 */
+    --el-dialog-title-color: oklch(21% 0.034 264.665);
+}
+
+
+.dark {
+    --color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+    --color-bg: oklch(21% 0.034 264.665); /* grey-900 */
+    --color-bg-light: oklch(27.8% 0.033 256.848); /* grey-800 */
+    --color-bg-hover: oklch(37.3% 0.034 259.733); /* grey-700 */
+    --color-bg-hover-light: oklch(44.6% 0.03 256.802); /* grey-600 */
+    --color-text: oklch(98.5% 0.001 106.423); /* stone-50 */
+    --color-text-lighter: oklch(92.8% 0.006 264.531); /* grey-300 */
+    --color-text-light: oklch(70.7% 0.022 261.325); /* grey-400 */
+    --color-text-hover: oklch(70.7% 0.165 254.624); /* blue-400 */
+    --color-border: oklch(37.3% 0.034 259.733);  /* grey-700 */
+    --color-menu-active: oklch(54.6% 0.245 262.881);  /* blur-600 */
+    --color-menu-hover: oklch(42.4% 0.199 265.638);  /* blue-800 */
+    --color-icon: oklch(1 0 1);/* white */
+    --color-icon-light: oklch(1 0 1);/* white */
+    --el-dialog-bg-color: oklch(27% 0.02 258); /* 暗背景 */
+    --el-dialog-title-color: oklch(98.5% 0.001 106.423);
+/*   <svgIcon name="common-light" class-name="w-6 h-6 icon"/>  */
+}
+
+
+
 

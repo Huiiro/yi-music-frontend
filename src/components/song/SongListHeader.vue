@@ -2,12 +2,6 @@
 <script setup lang="ts">
 import {computed, onBeforeUnmount, ref, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
-
-import plus from '@/assets/svg/common/plus.svg'
-import deleteIcon from '@/assets/svg/common/delete.svg'
-import play from '@/assets/svg/play/play.svg'
-import task from '@/assets/svg/common/task.svg'
-import sort from '@/assets/svg/common/sort.svg'
 import {useClickOutside} from '@/utils/useClickOutside.ts'
 import {CONSTANTS} from '@/plugins/consts.ts'
 
@@ -72,20 +66,19 @@ watch(localSearchText, (val) => {
 onBeforeUnmount(() => {
   if (debounceTimer) clearTimeout(debounceTimer)
 })
-
 </script>
 
 <template>
-  <div class="text-white border-b border-gray-700">
+  <div class="text-text border-b border-border">
     <!-- 顶部主操作行 -->
     <div class="flex items-center justify-between px-4 py-3">
       <!-- 左侧：多选 -->
       <div class="flex items-center gap-2 z-10">
         <button
-            class="px-3 py-1 border border-gray-600 rounded text-sm hover:bg-gray-800 flex items-center gap-1"
+            class="px-3 py-1 border border-border rounded text-sm hover:bg-bg-light flex items-center gap-1"
             @click="emit('toggleMultiSelect')"
         >
-          <img :src="task" alt="" class="w-4 h-4"/>
+          <svgIcon name="common-task" class-name="w-4 h-4 icon"/>
           {{ multiSelectMode ? t('cancel_selection') : t('multi_select') }}
         </button>
 
@@ -95,11 +88,11 @@ onBeforeUnmount(() => {
               v-model="localSearchText"
               type="text"
               :placeholder="t('search_placeholder')"
-              class="px-2 py-1 pr-6 rounded border border-gray-600 text-sm focus:outline-none focus:border-blue-400 w-full"
+              class="px-2 py-1 pr-6 rounded border border-border text-sm focus:outline-none focus:border-blue-400 w-full"
           />
           <button
               v-if="localSearchText"
-              class="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+              class="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900 dark:hover:text-white"
               @click="localSearchText = ''"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -110,12 +103,12 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- 右侧：排序 -->
-      <div ref="dropdownRef" class="relative sort-dropdown text-sm text-white">
+      <div ref="dropdownRef" class="relative sort-dropdown text-sm text-text">
         <button
             class="flex items-center justify-between w-14 px-3 py-2  rounded hover:border-blue-400"
             @click="toggleDropdown"
         >
-          <img :src="sort" alt="" class="w-4 h-4"/>
+          <svgIcon name="common-task" class-name="w-4 h-4 icon"/>
           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
                viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
@@ -125,18 +118,18 @@ onBeforeUnmount(() => {
         <!-- 下拉菜单选项卡 -->
         <div
             v-if="showDropdown"
-            class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-600 rounded shadow-lg z-50"
+            class="absolute right-0 mt-2 w-48 bg-bg-light border border-border rounded shadow-lg z-50"
         >
           <div
               v-for="key in sortKeys"
               :key="key.value"
-              class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex justify-between items-center"
+              class="px-4 py-2 hover:bg-bg-hover cursor-pointer flex justify-between items-center"
               @click="handleSelect(key.value)"
           >
             <span>{{ key.label }}</span>
             <span v-if="key.value === props.sortType">
-          {{ props.sortOrder === 'asc' ? '↑' : '↓' }}
-        </span>
+              {{ props.sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
           </div>
         </div>
       </div>
@@ -146,7 +139,7 @@ onBeforeUnmount(() => {
     <div v-if="multiSelectMode" class="flex items-center justify-between px-4 pb-3 text-sm">
       <div class="flex items-center gap-3">
         <!-- 全选 / 取消全选 -->
-        <button class="hover:text-yellow-400 z-10" @click="emit('toggleSelectAll')">
+        <button class="hover:text-yellow-500 dark:hover:text-yellow-400 z-10" @click="emit('toggleSelectAll')">
           {{ isAllSelected ? t('unselect_all') : t('select_all') }}
         </button>
 
@@ -154,10 +147,11 @@ onBeforeUnmount(() => {
         <button
             :disabled="selectedCount === 0"
             class="flex items-center gap-1 z-10"
-            :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-blue-200' "
+            :class="selectedCount == 0 ? 'opacity-50 cursor-not-allowed':
+            'hover:text-blue-500 dark:hover:text-blue-400'"
             @click="emit('batchPlay')"
         >
-          <img :src="play" alt="" class="w-4 h-4"/>
+          <svgIcon name="play-play" class-name="w-4 h-4 icon"/>
           {{ t('play') }}
         </button>
 
@@ -165,10 +159,11 @@ onBeforeUnmount(() => {
         <button
             :disabled="selectedCount === 0"
             class="flex items-center gap-1 z-10"
-            :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-green-200' "
+            :class="selectedCount == 0 ? 'opacity-50 cursor-not-allowed':
+            'hover:text-green-500 dark:hover:text-green-400'"
             @click="emit('batchAdd')"
         >
-          <img :src="plus" alt="" class="w-4 h-4"/>
+          <svgIcon name="common-plus" class-name="w-4 h-4 icon"/>
           {{ t('add') }}
         </button>
 
@@ -176,10 +171,11 @@ onBeforeUnmount(() => {
         <button
             :disabled="selectedCount === 0"
             class="flex items-center gap-1 z-10"
-            :class=" selectedCount == 0 ? 'opacity-50 cursor-not-allowed': 'hover:text-red-200' "
+            :class="selectedCount == 0 ? 'opacity-50 cursor-not-allowed':
+            'hover:text-red-500 dark:hover:text-red-400'"
             @click="emit('batchDelete')"
         >
-          <img :src="deleteIcon" alt="" class="w-4 h-4"/>
+          <svgIcon name="common-delete" class-name="w-4 h-4 icon"/>
           {{ t('delete') }}
         </button>
 

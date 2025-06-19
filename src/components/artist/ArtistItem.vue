@@ -37,11 +37,11 @@ const goToArtistDetail = () => {
           alt="artist cover"
       />
     </div>
-    <div class="mt-2 text-sm font-semibold text-white truncate">
+    <div class="mt-2 text-sm font-semibold text-text truncate">
       {{ artist.artistName }}
     </div>
 
-    <div class="text-xs text-gray-400 flex items-center gap-1 truncate">
+    <div class="text-xs text-text-light flex items-center gap-1 truncate">
       {{ artist.songCount }}{{ t('song_count') }}
     </div>
   </div>

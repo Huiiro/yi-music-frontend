@@ -96,10 +96,10 @@ watch(() => route.query, (query) => {
           class="w-36 h-36 rounded-full shadow-md object-cover shrink-0"
       />
       <div class="flex flex-col justify-center min-w-0 w-full">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 truncate">
+        <h2 class="text-2xl sm:text-3xl font-bold text-text mb-2 truncate">
           {{ artistName }}
         </h2>
-        <div class="text-sm text-gray-100 truncate">
+        <div class="text-sm text-text-light truncate">
           {{ songCount }}{{ t('song_count') }}
         </div>
       </div>

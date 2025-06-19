@@ -5,15 +5,15 @@ import {useSettingsStore} from '@/store/settings'
 
 import SettingsGroup from '@/components/settings/SettingsGroup.vue'
 import SettingsItem from '@/components/settings/SettingsItem.vue'
-import LangSwitcher from '@/components/layout/header/LangSwitcher.vue'
-import SleepTimer from '@/components/settings/SleepTimer.vue'
+import LangSwitcher from '@/components/layout/header/components/LangSwitcher.vue'
+import SleepTimer from '@/components/settings/components/SleepTimer.vue'
 
 const {t} = useI18n()
 const settingsStore = useSettingsStore()
 
 const switchPlaylist = ref(false)
-const darkMode = ref(false)
 const globalShortcutKeys = ref(false)
+
 </script>
 
 <template>
@@ -26,13 +26,18 @@ const globalShortcutKeys = ref(false)
         </template>
       </SettingsItem>
     </SettingsGroup>
-
     <!-- Group.播放设置 -->
     <SettingsGroup :title="t('settings_group_play')">
       <!-- 启用顶部歌词 -->
       <SettingsItem :label="t('settings_item_enable_top_lyrics')">
         <template #control>
           <el-switch v-model="settingsStore.showTopLyrics"/>
+        </template>
+      </SettingsItem>
+      <!-- 启用底部控制栏区分 -->
+      <SettingsItem :label="t('settings_item_enable_bottom_control_distinct')">
+        <template #control>
+          <el-switch v-model="settingsStore.distinctFromBottomControl"/>
         </template>
       </SettingsItem>
       <!-- 启用定时播放 -->
@@ -61,7 +66,7 @@ const globalShortcutKeys = ref(false)
       <!-- 暗色模式 -->
       <SettingsItem :label="t('settings_item_dark')">
         <template #control>
-          <el-switch v-model="darkMode"/>
+          <el-switch v-model="settingsStore.darkMode"/>
         </template>
       </SettingsItem>
     </SettingsGroup>

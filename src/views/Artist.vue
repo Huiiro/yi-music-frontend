@@ -37,7 +37,7 @@ const loadData = async () => {
 
 <template>
   <div class="flex flex-col h-full">
-    <div class="sticky top-0 z-30 bg-gray-900">
+    <div class="sticky top-0 z-30">
       <ArtistHeader
           :size="minSize"
           @updateSize="updateSize"

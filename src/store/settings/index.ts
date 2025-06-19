@@ -10,6 +10,10 @@ export const useSettingsStore = defineStore('settings', {
         sleepTimerEndTime: 0,
         endAfterCurrentSong: false,
         customSleepTime: 10,
+        // darkMode
+        darkMode: false,
+        // 底部控制栏区分
+        distinctFromBottomControl: false,
     }),
     actions: {
         toggleTopLyrics() {
@@ -17,6 +21,12 @@ export const useSettingsStore = defineStore('settings', {
         },
         setCustomSleepTime(time: number) {
             this.customSleepTime = time
+        },
+        toggleDarkMode() {
+            this.darkMode = !this.darkMode
+        },
+        toggleDistinctFromBottomControl() {
+          this.distinctFromBottomControl = !this.distinctFromBottomControl
         },
         setSleepTimer(minutes: number, endAfterCurrentSong: boolean) {
             const now = Date.now()

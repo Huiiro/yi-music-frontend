@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
     "buffer": "^6.0.3",
+    "D": "^1.0.0",
     "element-plus": "^2.9.11",
+    "fast-glob": "^3.3.3",
     "lodash": "^4.17.21",
     "music-metadata-browser": "^2.5.11",
     "pinia": "^3.0.3",
@@ -35,6 +38,7 @@
     "unplugin-auto-import": "^19.3.0",
     "unplugin-vue-components": "^28.7.0",
     "vite": "^6.3.5",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^2.2.8"
   }
 }

@@ -2,11 +2,6 @@
 import {ref, onBeforeUnmount, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useClickOutside} from '@/utils/useClickOutside.ts'
-
-import size from '@/assets/svg/common/size.svg'
-import check from '@/assets/svg/common/check.svg'
-import sortAsc from '@/assets/svg/common/sort.svg'
-import sortDesc from '@/assets/svg/common/sort-converse.svg'
 import {CONSTANTS} from '@/plugins/consts.ts'
 
 const props = defineProps<{
@@ -62,7 +57,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="text-white border-b border-gray-700 sticky top-0 backdrop-blur z-30">
+  <div class="text-text border-b border-border sticky top-0 backdrop-blur z-30">
     <div class="flex items-center justify-between px-4 py-3">
       <!-- 左侧：搜索框 -->
       <div class="relative w-48">
@@ -70,11 +65,12 @@ onBeforeUnmount(() => {
             v-model="localSearchText"
             type="text"
             :placeholder="t('search_album_placeholder')"
-            class="px-2 py-1 pr-6 rounded border border-gray-600 text-sm focus:outline-none focus:border-blue-400 w-full bg-transparent"
+            class="px-2 py-1 pr-6 rounded border border-border
+            text-text text-sm focus:outline-none focus:border-blue-400 w-full bg-transparent"
         />
         <button
             v-if="localSearchText"
-            class="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+            class="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900 dark:hover:text-white"
             @click="localSearchText = ''"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -87,35 +83,35 @@ onBeforeUnmount(() => {
       <div class="relative flex items-center gap-2 text-sm">
         <!-- 排序按钮 -->
         <button
-            class="flex items-center p-1 rounded hover:border-blue-400"
+            class="flex items-center p-1 rounded hover:text-primary"
             @click="toggleSort"
         >
-          <img :src="sortOrder === 'asc' ? sortAsc : sortDesc" alt="sort" class="w-4 h-4"/>
+          <svgIcon :name="sortOrder === 'asc' ? 'common-sort' : 'common-sort-converse'" class-name="w-4 h-4 icon"/>
         </button>
 
         <!-- 大小按钮 -->
         <div ref="dropdownRef" class="relative">
           <button
-              class="flex items-center p-1 rounded hover:border-green-400 size-btn"
+              class="flex items-center p-1 rounded hover:text-primary size-btn"
               @click="toggleDropdown"
           >
-            <img :src="size" :alt="t('cover_size_alt')" class="w-4 h-4"/>
+            <svgIcon name="common-size" class-name="w-4 h-4 icon"/>
           </button>
 
           <!-- 弹窗 -->
           <div
               v-if="showDropdown"
-              class="absolute right-0 mt-2 w-32 bg-gray-800 border border-gray-600 rounded shadow-lg z-50 size-popup"
+              class="absolute right-0 mt-2 w-32 bg-bg-light border border-border rounded shadow-lg z-50 size-popup"
           >
             <div
                 v-for="item in coverSizes"
                 :key="item.value"
-                class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex justify-between items-center"
+                class="px-4 py-2 hover:bg-bg-hover cursor-pointer flex justify-between items-center"
                 @click="emit('updateSize', item.value); showDropdown = false"
             >
               <span>{{ t('cover_size.' + item.label) }}</span>
               <span v-if="item.value === props.size">
-                <img :src="check" alt="" class="w-4 h-4"/>
+                <svgIcon name="common-check" class-name="w-4 h-4 icon"/>
               </span>
             </div>
           </div>

@@ -186,7 +186,7 @@ onMounted(async () => {
     />
     <div
         v-infinite-scroll="load"
-        class="h-full divide-y divide-gray-700 overflow-auto"
+        class="h-full divide-y divide-border overflow-auto"
     >
       <SongListItem
           v-for="(song, i) in songList"

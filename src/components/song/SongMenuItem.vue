@@ -1,8 +1,8 @@
 <!-- 歌曲菜单栏组件 -->
 <script setup lang="ts">
 defineProps<{
-  icon: string,
-  label: string,
+  icon: string
+  label: string
 }>()
 
 const emit = defineEmits<{
@@ -16,10 +16,10 @@ const handleClick = () => {
 
 <template>
   <div
-      class="px-4 py-1.5 hover:bg-gray-700 cursor-pointer flex items-center gap-x-2 text-sm"
+      class="px-4 py-1.5 hover:bg-hover cursor-pointer flex items-center gap-x-2 text-sm"
       @click="handleClick"
   >
-    <img :src="icon" :alt="label" class="w-4 h-4"/>
+    <svgIcon :name="icon" class-name="w-4 h-4 icon"/>
     <span>{{ label }}</span>
   </div>
 </template>
