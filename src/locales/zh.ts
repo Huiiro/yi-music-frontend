@@ -122,8 +122,12 @@ export default {
     settings_item_next: '下一首',
     settings_item_plus_volume: '增加音量',
     settings_item_min_volume: '减少音量',
+    settings_item_plus_time: '快进',
+    settings_item_min_time: '后退',
     settings_item_toggle_play_mode: '切换播放方式',
     settings_item_local_file_path: '本地文件路径',
     settings_item_clear_all_files: '清空全部文件',
     settings_item_desc_switch_playlist: '双击播放歌曲时，自动切换到当前所在的播放列表',
+    shortcut_keys_repeat: '已被绑定到其他操作',
+    shortcut_keys_clear: '清除绑定',
 }

@@ -29,30 +29,50 @@ const onResize = () => {
   }
 }
 
-// 监听键盘快捷键事件
-const handleKeyDown = (e: KeyboardEvent) => {
-  const key = e.key.toLowerCase()
-  const { shortcutKeys } = settingsStore
+// 格式化按键
+const normalizeKey = (e: KeyboardEvent): string => {
+  const keys: string[] = []
 
-  switch (key) {
-    case shortcutKeys.play:
-      playStore.togglePlay()
-      break
-    case shortcutKeys.prev:
-      playStore.prevTrack()
-      break
-    case shortcutKeys.next:
-      playStore.nextTrack()
-      break
-    case shortcutKeys.iv:
-      playStore.increaseVolume()
-      break
-    case shortcutKeys.dv:
-      playStore.decreaseVolume()
-      break
-    case shortcutKeys.tp:
-      playStore.togglePlayMode()
-      break
+  if (e.ctrlKey) keys.push('ctrl')
+  if (e.altKey) keys.push('alt')
+  if (e.metaKey) keys.push('meta')
+  if (e.shiftKey) keys.push('shift')
+
+  const mainKey = e.key.toLowerCase()
+
+  const modifierKeys = ['control', 'shift', 'alt', 'meta']
+  if (modifierKeys.includes(mainKey) && keys.length === 1) return ''
+
+  keys.push(mainKey)
+  return keys.join('+')
+}
+
+// 监听按键事件
+const handleKeyDown = (e: KeyboardEvent) => {
+  const keyCombo = normalizeKey(e)
+  if (!keyCombo) return
+
+  const { shortcutKeys } = settingsStore
+  const matched = Object.entries(shortcutKeys).find(([_, v]) => v === keyCombo)
+
+  const actions: Record<string, () => void> = {
+    play: playStore.togglePlay,
+    prev: playStore.prevTrack,
+    next: playStore.nextTrack,
+    it: playStore.increaseTime,
+    dt: playStore.decreaseTime,
+    iv: playStore.increaseVolume,
+    dv: playStore.decreaseVolume,
+    tp: playStore.togglePlayMode,
+  }
+
+  if (matched) {
+    const [action] = matched
+    const fn = actions[action]
+    if (fn) {
+      fn()
+      e.preventDefault()
+    }
   }
 }
 

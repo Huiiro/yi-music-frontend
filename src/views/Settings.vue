@@ -7,12 +7,12 @@ import SettingsGroup from '@/components/settings/SettingsGroup.vue'
 import SettingsItem from '@/components/settings/SettingsItem.vue'
 import LangSwitcher from '@/components/layout/header/components/LangSwitcher.vue'
 import SleepTimer from '@/components/settings/components/SleepTimer.vue'
+import ShortcutInput from '@/components/settings/components/ShortcutInput.vue'
 
 const {t} = useI18n()
 const settingsStore = useSettingsStore()
 
 const switchPlaylist = ref(false)
-const globalShortcutKeys = ref(false)
 
 </script>
 
@@ -74,47 +74,52 @@ const globalShortcutKeys = ref(false)
 
     <!-- Group.快捷键设置 -->
     <SettingsGroup :title="t('settings_group_shortcut_keys')">
-      <!-- 启用全局快捷键 -->
-      <SettingsItem :label="t('settings_item_enable_global_shortcut_keys')">
-        <template #control>
-          <el-switch v-model="globalShortcutKeys"/>
-        </template>
-      </SettingsItem>
       <!-- 播放/暂停 -->
       <SettingsItem :label="t('settings_item_play_pause')">
         <template #control>
-          <input class="w-16" />
-          <input class="w-16" />
+          <ShortcutInput action="play" />
         </template>
       </SettingsItem>
       <!-- 上一首 -->
       <SettingsItem :label="t('settings_item_prev')">
         <template #control>
-
+          <ShortcutInput action="prev" />
         </template>
       </SettingsItem>
       <!-- 下一首 -->
       <SettingsItem :label="t('settings_item_next')">
         <template #control>
-
+          <ShortcutInput action="next" />
+        </template>
+      </SettingsItem>
+      <!-- 后退 -->
+      <SettingsItem :label="t('settings_item_min_time')">
+        <template #control>
+          <ShortcutInput action="dt" />
+        </template>
+      </SettingsItem>
+      <!-- 快进 -->
+      <SettingsItem :label="t('settings_item_plus_time')">
+        <template #control>
+          <ShortcutInput action="it" />
         </template>
       </SettingsItem>
       <!-- 增加音量 -->
       <SettingsItem :label="t('settings_item_plus_volume')">
         <template #control>
-
+          <ShortcutInput action="iv" />
         </template>
       </SettingsItem>
       <!-- 减少音量 -->
       <SettingsItem :label="t('settings_item_min_volume')">
         <template #control>
-
+          <ShortcutInput action="dv" />
         </template>
       </SettingsItem>
       <!-- 切换播放方式 -->
       <SettingsItem :label="t('settings_item_toggle_play_mode')">
         <template #control>
-
+          <ShortcutInput action="tp" />
         </template>
       </SettingsItem>
     </SettingsGroup>
@@ -124,13 +129,11 @@ const globalShortcutKeys = ref(false)
       <!-- 本地文件路径 -->
       <SettingsItem :label="t('settings_item_local_file_path')">
         <template #control>
-
         </template>
       </SettingsItem>
       <!-- 清空全部文件 -->
       <SettingsItem :label="t('settings_item_clear_all_files')">
         <template #control>
-
         </template>
       </SettingsItem>
     </SettingsGroup>

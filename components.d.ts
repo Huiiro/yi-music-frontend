@@ -42,6 +42,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SettingsGroup: typeof import('./src/components/settings/SettingsGroup.vue')['default']
     SettingsItem: typeof import('./src/components/settings/SettingsItem.vue')['default']
+    ShortcutInput: typeof import('./src/components/settings/components/ShortcutInput.vue')['default']
     SideBar: typeof import('./src/components/layout/sidebar/SideBar.vue')['default']
     SidebarItem: typeof import('./src/components/layout/sidebar/SidebarItem.vue')['default']
     SleepTimer: typeof import('./src/components/settings/components/SleepTimer.vue')['default']

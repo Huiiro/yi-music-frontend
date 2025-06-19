@@ -122,8 +122,12 @@ export default {
     settings_item_next: 'Next',
     settings_item_plus_volume: 'Volume up',
     settings_item_min_volume: 'Volume down',
+    settings_item_plus_time: 'Time up',
+    settings_item_min_time: 'Time down',
     settings_item_toggle_play_mode: 'Toggle play mode',
     settings_item_local_file_path: 'Local file path',
     settings_item_clear_all_files: 'Clear all files',
-    settings_item_desc_switch_playlist: 'When double-clicking a song, automatically switch to the current playlist'
+    settings_item_desc_switch_playlist: 'When double-clicking a song, automatically switch to the current playlist',
+    shortcut_keys_repeat: 'Already bound to another action',
+    shortcut_keys_clear: 'Clear bound',
 }

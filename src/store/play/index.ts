@@ -1,4 +1,3 @@
-// src/store/index.ts
 import {defineStore} from 'pinia'
 import order from '@/assets/svg/control/order.svg'
 import loop from '@/assets/svg/control/loop.svg'
@@ -182,6 +181,20 @@ export const usePlayStore = defineStore('play', {
         // 修改静音
         setMuted(flag: boolean) {
             this.muted = flag
+        },
+
+        // 快进（默认 5 秒）
+        increaseTime(step = 5) {
+            if (!this.audioElement) return
+            const newTime = Math.min(this.audioElement.duration, this.audioElement.currentTime + step)
+            this.setCurrentTime(newTime)
+        },
+
+        // 后退（默认 5 秒）
+        decreaseTime(step = 5) {
+            if (!this.audioElement) return
+            const newTime = Math.max(0, this.audioElement.currentTime - step)
+            this.setCurrentTime(newTime)
         },
 
         // 修改当前音频播放进度
@@ -465,6 +478,8 @@ export const usePlayStore = defineStore('play', {
                 await this.playSongById(this.playList[this.currentIndex].id, false)
             }
         },
+
+        // 设置专辑颜色
         setGradientColors(top: string, bottom: string) {
             this.topColor = top
             this.bottomColor = bottom
