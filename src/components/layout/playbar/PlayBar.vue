@@ -50,7 +50,7 @@ const listRef = computed({
 
 // 大屏渐变色
 const backgroundStyle = computed(() => ({
-  backgroundImage: `linear-gradient(to bottom, ${uiStore.topColor}, ${uiStore.bottomColor})`,
+  backgroundImage: `linear-gradient(to bottom, ${playStore.topColor}, ${playStore.bottomColor})`,
 }))
 
 // 播放方式图标
@@ -455,7 +455,7 @@ const onDragEnd = () => {
 
   <footer
       class="relative bg-bg text-text flex items-center h-16 px-4 select-none z-50"
-      :style="{ backgroundColor: showPlayer ? uiStore.bottomColor : '' }"
+      :style="{ backgroundColor: showPlayer ? playStore.bottomColor : '' }"
       @click="togglePlayer"
   >
     <!-- 遮罩 -->

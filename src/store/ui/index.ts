@@ -2,10 +2,6 @@ import {defineStore} from 'pinia'
 
 export const useUIStore = defineStore('ui', {
     state: () => ({
-        // 颜色
-        mainColor: 'rgb(0, 0, 0)',
-        topColor: '#000',
-        bottomColor: '#000',
         // 歌词大小
         lyricFontSizeIndex: 1,
         fontSizeOptions: ['text-sm', 'text-xl', 'text-2xl', 'text-3xl'],
@@ -47,16 +43,6 @@ export const useUIStore = defineStore('ui', {
         }
     },
     actions: {
-        /**
-         * colors
-         */
-        setMainColor(color: string) {
-            this.mainColor = color
-        },
-        setGradientColors(top: string, bottom: string) {
-            this.topColor = top
-            this.bottomColor = bottom
-        },
         toggleSliderVisible() {
             this.showLyricSizeSlider = !this.showLyricSizeSlider
         },

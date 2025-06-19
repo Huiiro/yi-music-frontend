@@ -1,3 +1,4 @@
+<!-- 专辑页面组件 -->
 <script setup lang="ts">
 import {defineProps} from 'vue'
 import {useRouter} from 'vue-router'

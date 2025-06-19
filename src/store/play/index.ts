@@ -5,19 +5,17 @@ import loop from '@/assets/svg/control/loop.svg'
 import single from '@/assets/svg/control/single.svg'
 import shuffle from '@/assets/svg/control/shuffle.svg'
 import defaultCover from '@/assets/svg/default/default-cover.svg'
-
 import type {AudioTrack, LyricLine} from '@/api/interface'
 import {parseBlob} from "music-metadata-browser"
 import {parseLRC} from "@/utils/lyricParser.ts"
 import {getImageTopBottomColors} from "@/utils/color.ts"
-import {useUIStore} from "@/store/ui"
 import {shuffleArray} from "@/utils/array.ts"
 import {fetchSongAudioBlob} from "@/api/song.ts"
 
-const uiStore = useUIStore()
-
 export const usePlayStore = defineStore('play', {
     state: () => ({
+        topColor: '#000',
+        bottomColor: '#000',
         // 是否播放
         isPlay: false,
         // 打开播放器
@@ -169,6 +167,18 @@ export const usePlayStore = defineStore('play', {
             }
         },
 
+        // 增加音量
+        increaseVolume(step = 5) {
+            const newVolume = Math.min(100, this.volume + step)
+            this.setVolume(newVolume)
+        },
+
+        // 减少音量
+        decreaseVolume(step = 5) {
+            const newVolume = Math.max(0, this.volume - step)
+            this.setVolume(newVolume)
+        },
+
         // 修改静音
         setMuted(flag: boolean) {
             this.muted = flag
@@ -310,14 +320,14 @@ export const usePlayStore = defineStore('play', {
                     await new Promise<void>((resolve, reject) => {
                         img.onload = () => {
                             const {topColor, bottomColor} = getImageTopBottomColors(img)
-                            uiStore.setGradientColors(topColor, bottomColor)
+                            this.setGradientColors(topColor, bottomColor)
                             resolve()
                         }
                         img.onerror = reject
                     })
                 } else {
                     // 为默认封面设置单独背景样式
-                    uiStore.setGradientColors('#454545', '#222222')
+                    this.setGradientColors('#454545', '#222222')
                 }
 
                 let rawLyrics =
@@ -454,7 +464,11 @@ export const usePlayStore = defineStore('play', {
                 // 一般模式
                 await this.playSongById(this.playList[this.currentIndex].id, false)
             }
-        }
+        },
+        setGradientColors(top: string, bottom: string) {
+            this.topColor = top
+            this.bottomColor = bottom
+        },
     },
     persist: true
 })

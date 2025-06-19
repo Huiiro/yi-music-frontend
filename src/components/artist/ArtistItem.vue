@@ -1,3 +1,4 @@
+<!-- 艺术家页面组件 -->
 <script setup lang="ts">
 import {defineProps} from 'vue'
 import {useRouter} from 'vue-router'
@@ -30,13 +31,14 @@ const goToArtistDetail = () => {
       class="w-full cursor-pointer transition-transform hover:scale-105"
       @click="goToArtistDetail"
   >
-    <div class="w-full aspect-square overflow-hidden rounded-xl shadow-md">
+    <div class="w-full aspect-square overflow-hidden">
       <img
-          class="w-full h-full object-cover rounded-full shadow-md mb-3"
+          class="w-full h-full object-cover rounded-full"
           :src="artist.albumCover || defaultArtist"
           alt="artist cover"
       />
     </div>
+
     <div class="mt-2 text-sm font-semibold text-text truncate">
       {{ artist.artistName }}
     </div>
@@ -46,4 +48,3 @@ const goToArtistDetail = () => {
     </div>
   </div>
 </template>
-

@@ -1,4 +1,4 @@
-<!-- components/SvgIcon.vue -->
+<!-- SvgIcon -->
 <template>
   <svg :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName" />

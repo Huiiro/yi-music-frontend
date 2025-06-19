@@ -14,6 +14,18 @@ export const useSettingsStore = defineStore('settings', {
         darkMode: false,
         // 底部控制栏区分
         distinctFromBottomControl: false,
+        enableGlobalShortcutKeys: false,
+        shortcutKeys: {
+            play: 'blank', // 播放暂停
+            prev: '', // 上一首
+            next: '', // 下一首
+            iv: '', //增加音量
+            dv: '', // 减少音量
+            tp: '' // 切换播放模式
+        },
+        globalShortcutKeys: {
+
+        }
     }),
     actions: {
         toggleTopLyrics() {

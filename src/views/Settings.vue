@@ -26,6 +26,7 @@ const globalShortcutKeys = ref(false)
         </template>
       </SettingsItem>
     </SettingsGroup>
+
     <!-- Group.播放设置 -->
     <SettingsGroup :title="t('settings_group_play')">
       <!-- 启用顶部歌词 -->
@@ -82,7 +83,8 @@ const globalShortcutKeys = ref(false)
       <!-- 播放/暂停 -->
       <SettingsItem :label="t('settings_item_play_pause')">
         <template #control>
-
+          <input class="w-16" />
+          <input class="w-16" />
         </template>
       </SettingsItem>
       <!-- 上一首 -->

@@ -54,10 +54,8 @@ watchEffect(() => {
 
 <template>
   <div ref="lyricContainer" class="overflow-auto h-full lyric-scroll">
-
     <!-- 顶部留白区域 -->
     <div class="h-[40%] shrink-0"/>
-
     <!-- 歌词内容区域 -->
     <div class="w-full">
       <div
@@ -75,7 +73,6 @@ watchEffect(() => {
         {{ line.text }}
       </div>
     </div>
-
     <!-- 底部留白区域 -->
     <div class="h-[40%] shrink-0"/>
   </div>

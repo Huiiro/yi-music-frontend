@@ -1,3 +1,4 @@
+<!-- 艺术家页面头部 -->
 <script setup lang="ts">
 import {ref, onBeforeUnmount, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
