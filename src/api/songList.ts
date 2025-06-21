@@ -4,6 +4,12 @@ import type {SongListEntity} from '@/api/interface.ts'
 export const getSongListCollection = () =>
     request.get('/songList/list')
 
+export const add2SongList = (songId: number) =>
+    request.get(`/songList/add2list?songId=${songId}`)
+
+export const addSong2SongList = (songId: number, songListId: number) =>
+    request.get(`/songList/addSong?songId=${songId}&songListId=${songListId}`)
+
 export const getSongListSingleton = (id: number) =>
     request.get(`/songList/${id}`)
 

@@ -19,6 +19,7 @@ export default {
     play_pause_alt: '播放/暂停',
     play_alt: '播放',
     pause_alt: '暂停',
+    play_all_alt: '播放全部',
     next_track_alt: '下一首',
     prev_track_alt: '上一首',
     playMode: {
@@ -130,4 +131,12 @@ export default {
     settings_item_desc_switch_playlist: '双击播放歌曲时，自动切换到当前所在的播放列表',
     shortcut_keys_repeat: '已被绑定到其他操作',
     shortcut_keys_clear: '清除绑定',
+    get_song_list_fail: '获取歌单失败',
+    add_success: '添加成功',
+    add_fail_exists: '添加失败，歌曲已存在！',
+    add_fail_unknown: '添加失败，请稍后重试！',
+    add_song_list_dialog_header: '添加至歌单',
+    added: '已添加',
+    create_time: '创建时间：',
+    delete_playlist: '删除歌单',
 }

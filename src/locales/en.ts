@@ -19,6 +19,7 @@ export default {
     play_pause_alt: 'Play/Pause',
     play_alt: 'Play',
     pause_alt: 'Pause',
+    play_all_alt: 'Play All',
     next_track_alt: 'Next track',
     prev_track_alt: 'Previous track',
     playMode: {
@@ -130,4 +131,12 @@ export default {
     settings_item_desc_switch_playlist: 'When double-clicking a song, automatically switch to the current playlist',
     shortcut_keys_repeat: 'Already bound to another action',
     shortcut_keys_clear: 'Clear bound',
+    get_song_list_fail: 'Failed to get playlist',
+    add_success: 'Added successfully',
+    add_fail_exists: 'Failed to add, song already exists!',
+    add_fail_unknown: 'Failed to add, please try again later!',
+    add_song_list_dialog_header: 'Add to playlist',
+    added: 'Already added',
+    create_time: 'Create time: ',
+    delete_playlist: 'Delete Playlist',
 }

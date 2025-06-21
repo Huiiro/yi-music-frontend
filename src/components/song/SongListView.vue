@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {aggregationSearch, aggregationSort, getSongList2Playlist} from '@/api/song.ts'
 import {usePlayStore} from '@/store/play'
+import type {songEntity} from '@/api/interface.ts'
+import {CONSTANTS} from '@/plugins/consts.ts'
 
 import SongListItem from '@/components/song/SongListItem.vue'
-import type {songEntity} from '@/api/interface.ts'
 import SongListHeader from '@/components/song/SongListHeader.vue'
-import {CONSTANTS} from '@/plugins/consts.ts'
+import AddToSongList from '@/components/song/component/AddToSongList.vue'
 
 const props = defineProps<{
   source: {
@@ -73,7 +74,11 @@ const load = async (resort: boolean | null, search: boolean | null) => {
     )
   }
 
-  // TypeError data check ignore
+  if (!res || !res.data) {
+    loading.value = false
+    return
+  }
+
   const result = res.data
 
   if (result?.data?.length) {
@@ -159,15 +164,41 @@ const handleBatchAdd = () => {
   console.log('添加', [...selectedIds.value])
 }
 
+// 添加歌曲至歌单
+const selectedSongId = ref<number>(0)
+const addSongListDialogVisible = ref(false)
+const handleAddToPlaylist = (id: number) => {
+  addSongListDialogVisible.value = true
+  selectedSongId.value = id
+}
+
 onMounted(async () => {
   const response = await getSongList2Playlist()
   playStore.setPlayList(response.data)
   await load(false, true)
 })
 
+watch(
+    () => props.source,
+    async () => {
+      page.value.current = 1
+      songList.value = []
+      noMore.value = false
+      await load(false, true)
+    },
+    { deep: true }
+)
 </script>
 
 <template>
+
+  <!-- 添加歌曲至歌单 -->
+  <AddToSongList
+      v-model="addSongListDialogVisible"
+      :songId="selectedSongId"
+      @close="addSongListDialogVisible = false"
+  />
+
   <div class="flex flex-col h-full">
     <SongListHeader
         :multiSelectMode="multiSelectMode"
@@ -201,6 +232,7 @@ onMounted(async () => {
           @closeMenu="() => (activeMenuIndex = null)"
           @playSong="() => playSongById(song.id)"
           @toggleSelect="toggleSelect(song.id)"
+          @addToPlaylist="() => handleAddToPlaylist(song.id)"
       />
     </div>
   </div>

@@ -27,6 +27,7 @@ const emit = defineEmits<{
   (e: 'closeMenu'): void
   (e: 'playSong', index: number): void
   (e: 'toggleSelect'): void
+  (e:'addToPlaylist'): void
 }>()
 
 const {t} = useI18n()
@@ -172,9 +173,14 @@ const handleClickArtistDetail = (e: MouseEvent) => {
                         icon="play-play" :label="t('play_next')"
                         @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
           />
+          <!-- 添加歌曲至歌单 -->
           <SongMenuItem class="hover:bg-bg-hover"
-                        icon="common-plus" :label="t('add_song_list_library')"
-                        @click="() => { /* 执行详情逻辑 */ emit('closeMenu') }"
+                        icon="common-plus" :label="t('add_song_list')"
+                        @click="() => { emit('addToPlaylist'); emit('closeMenu') }"
+          />
+          <SongMenuItem class="hover:bg-bg-hover"
+                        icon="common-plus" :label="t('add_library')"
+                        @click="() => {  emit('closeMenu') }"
           />
           <SongMenuItem class="hover:bg-bg-hover"
                         icon="common-plus" :label="t('add_playlist')"

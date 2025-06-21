@@ -143,7 +143,7 @@ onBeforeUnmount(() => {
 
   <transition name="slide">
     <aside
-        class="h-full bg-bg text-text no-bg-transition overflow-y-auto overflow-x-hidden relative select-none transform"
+        class="h-full text-text no-bg-transition overflow-y-auto overflow-x-hidden relative select-none"
         :class="[
                   sidebarStore.visible ? 'translate-x-0' : '-translate-x-full',
                   isResizing ? '': 'transition-all duration-300 ease-in-out'

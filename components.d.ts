@@ -8,6 +8,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Add2Library: typeof import('./src/components/song/component/Add2Library.vue')['default']
+    Add2SongList: typeof import('./src/components/song/component/Add2SongList.vue')['default']
+    AddToLibrary: typeof import('./src/components/song/component/AddToLibrary.vue')['default']
+    AddToSongList: typeof import('./src/components/song/component/AddToSongList.vue')['default']
     AlbumHeader: typeof import('./src/components/album/AlbumHeader.vue')['default']
     AlbumItem: typeof import('./src/components/album/AlbumItem.vue')['default']
     ArtistHeader: typeof import('./src/components/artist/ArtistHeader.vue')['default']
@@ -35,6 +39,7 @@ declare module 'vue' {
     LangSwitcher: typeof import('./src/components/layout/header/components/LangSwitcher.vue')['default']
     Lyrics: typeof import('./src/components/layout/playbar/components/Lyrics.vue')['default']
     Main: typeof import('./src/components/layout/main/Main.vue')['default']
+    MediaHeader: typeof import('./src/components/common/MediaHeader.vue')['default']
     PlayBar: typeof import('./src/components/layout/playbar/PlayBar.vue')['default']
     PlayerControls: typeof import('./src/components/layout/playbar/PlayerControls.vue')['default']
     PlaylistButton: typeof import('./src/components/layout/playbar/PlaylistButton.vue')['default']
