@@ -139,4 +139,7 @@ export default {
     added: '已添加',
     create_time: '创建时间：',
     delete_playlist: '删除歌单',
+    delete_playlist_success: '删除歌单成功',
+    delete_playlist_warn: '确定要删除该歌单吗？',
+    delete_playlist_warn_desc: '(该操作无法取消且不会删除本地歌曲)',
 }

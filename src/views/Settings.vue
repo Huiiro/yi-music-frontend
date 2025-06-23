@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {ref} from 'vue'
 import {useI18n} from 'vue-i18n'
+import {usePlayStore} from '@/store/play'
 import {useSettingsStore} from '@/store/settings'
 
 import SettingsGroup from '@/components/settings/SettingsGroup.vue'
@@ -10,10 +10,8 @@ import SleepTimer from '@/components/settings/components/SleepTimer.vue'
 import ShortcutInput from '@/components/settings/components/ShortcutInput.vue'
 
 const {t} = useI18n()
+const playStore = usePlayStore()
 const settingsStore = useSettingsStore()
-
-const switchPlaylist = ref(false)
-
 </script>
 
 <template>
@@ -51,7 +49,7 @@ const switchPlaylist = ref(false)
       <SettingsItem :label="t('settings_item_switch_playlist')"
                     :description="t('settings_item_desc_switch_playlist')">
         <template #control>
-          <el-switch v-model="switchPlaylist"/>
+          <el-switch v-model="playStore.switchPlaylist"/>
         </template>
       </SettingsItem>
     </SettingsGroup>

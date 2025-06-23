@@ -587,8 +587,4 @@ const onDragEnd = () => {
   padding: 0;
 }
 
-::v-deep(.el-drawer) {
-  background-color: transparent;
-  --el-drawer-bg-color: transparent;
-}
 </style>

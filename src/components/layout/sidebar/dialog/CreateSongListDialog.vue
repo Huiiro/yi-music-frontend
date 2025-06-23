@@ -68,10 +68,10 @@ const reset = () => {
       </div>
 
       <template #footer>
-        <div class="flex justify-end gap-2 px-4 pb-4">
+        <div class="flex justify-end gap-2 px-2 pb-1">
           <button
               @click="visible = false"
-              class="px-4 py-1 rounded border border-gray-500
+              class="px-4 py-1 rounded border border-border
               text-sm text-text hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             {{ t('cancel') }}

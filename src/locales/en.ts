@@ -98,7 +98,7 @@ export default {
     error_library_name_required: 'Library name cannot be empty',
     error_library_name_too_long: 'Library name cannot exceed {max} characters',
     timer_remains: 'Remaining',
-    timer_minutes: 'minutes',
+    timer_minutes: 'min',
     timer_custom: 'Custom',
     timer_confirm: 'Confirm',
     timer_end_after_current_song: 'End after current song',
@@ -139,4 +139,7 @@ export default {
     added: 'Already added',
     create_time: 'Create time: ',
     delete_playlist: 'Delete Playlist',
+    delete_playlist_success: 'Delete Playlist successfully',
+    delete_playlist_warn: 'Are you sure you want to delete this playlist?',
+    delete_playlist_warn_desc: '(This action cannot be undone and will not delete local songs)',
 }

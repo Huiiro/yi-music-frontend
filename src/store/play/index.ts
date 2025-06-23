@@ -49,6 +49,8 @@ export const usePlayStore = defineStore('play', {
         audioBlob: null as Blob | null,
         audioUrl: null as string | null,
         audioElement: null as HTMLAudioElement | null,
+        //
+        switchPlaylist: true,
     }),
     getters: {
         playModeIcon(state) {
@@ -71,7 +73,16 @@ export const usePlayStore = defineStore('play', {
             }
         },
         _onTrackEnded() {
-            this.nextTrack()
+            if (this.playMode === 2) {
+                // 单曲循环：从头播放当前歌曲
+                if (this.audioElement) {
+                    this.audioElement.currentTime = 0
+                    this.audioElement.play()
+                }
+            } else {
+                // 其他模式：播放下一首
+                this.nextTrack()
+            }
         },
         _onTimeUpdateBound() {
             // 初始化为空
@@ -222,19 +233,7 @@ export const usePlayStore = defineStore('play', {
                         return
                     }
                     break
-
-                case 1: // 列表循环
-                    if (direction === 1) {
-                        newIndex = (newIndex + 1) % total
-                    } else {
-                        newIndex = (newIndex - 1 + total) % total
-                    }
-                    break
-
-                case 2: // 单曲循环
-                    break
-
-                case 3: // 随机播放
+                case 1 | 2 | 3: // 列表循环 单曲循环 随机播放
                     if (direction === 1) {
                         newIndex = (newIndex + 1) % total
                     } else {

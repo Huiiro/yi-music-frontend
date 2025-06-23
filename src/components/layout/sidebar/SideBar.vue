@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue'
 import {ElMessage} from 'element-plus'
 import {CONSTANTS} from '@/plugins/consts.ts'
 import {useRoute, useRouter} from 'vue-router'
+import {useAppStore} from '@/store/app'
 import {useSidebarStore} from '@/store/sidebar'
 import {useI18n} from 'vue-i18n'
 import {createSongListApi, getSongListCollection} from '@/api/songList.ts'
@@ -13,6 +14,7 @@ import SidebarItem from './SidebarItem.vue'
 import CreateSongListDialog from '@/components/layout/sidebar/dialog/CreateSongListDialog.vue'
 import CreateLibraryDialog from '@/components/layout/sidebar/dialog/CreateLibraryDialog.vue'
 
+const appStore = useAppStore()
 const sidebarStore = useSidebarStore()
 const router = useRouter()
 const route = useRoute()
@@ -27,8 +29,8 @@ const sectionA = computed(() => [
   {title: t('artist'), path: '/artist', icon: 'menu-artist'},
   {title: t('album'), path: '/album', icon: 'menu-album'},
 ])
-const sectionB = ref<{ title: string; path: string }[]>([])
-const sectionC = ref<{ title: string; path: string }[]>([])
+const sectionB = ref<{ title: string; path: string; cover: string }[]>([])
+const sectionC = ref<{ title: string; path: string; cover: string }[]>([])
 const sectionD = computed(() => [
   {title: t('history'), path: '/history', icon: 'menu-history'},
   {title: t('settings'), path: '/settings', icon: 'menu-settings'},
@@ -75,7 +77,8 @@ const fetchSongList = async () => {
   const songListData = await getSongListCollection()
   sectionC.value = songListData.data.map((item: any) => ({
     title: item.songListName,
-    path: `/playlist/${item.songListId}`
+    path: `/playlist/${item.songListId}`,
+    cover: item.songListCover,
   }))
 }
 
@@ -126,6 +129,16 @@ onBeforeUnmount(() => {
   window.removeEventListener('mousemove', handleMouseMove)
   window.removeEventListener('mouseup', stopResize)
 })
+
+watch(
+    () => appStore.shouldReloadPlaylist,
+    async (val) => {
+      if (val) {
+        await fetchSongList()
+        appStore.markBReloaded()
+      }
+    }
+)
 </script>
 
 <template>
@@ -194,7 +207,10 @@ onBeforeUnmount(() => {
         </div>
         <ul class="space-y-1">
           <li v-for="item in sectionB" :key="item.title">
-            <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
+            <SidebarItem :title="item.title"
+                         :active="isActive(item.path)"
+                         :image="item.cover"
+                         @click="handleClick(item.path)"/>
           </li>
         </ul>
         <hr class="border-t border-border my-4"/>
@@ -214,7 +230,10 @@ onBeforeUnmount(() => {
         </div>
         <ul class="space-y-1">
           <li v-for="item in sectionC" :key="item.title">
-            <SidebarItem :title="item.title" :active="isActive(item.path)" @click="handleClick(item.path)"/>
+            <SidebarItem :title="item.title"
+                         :active="isActive(item.path)"
+                         :image="item.cover"
+                         @click="handleClick(item.path)"/>
           </li>
         </ul>
         <hr class="border-t border-border my-4"/>

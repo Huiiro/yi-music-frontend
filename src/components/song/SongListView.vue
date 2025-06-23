@@ -39,10 +39,28 @@ const sortType = ref<string>('default')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 const searchText = ref('')
 
+const saveSongList = ref([] as any[])
 
 // 播放歌曲
 const playSongById = (id: number) => {
+  if (playStore.playList.length == 0) {
+    // 兜底 防止播放列表为空
+    getSongList2Playlist().then(response => {
+      playStore.setPlayList(response.data)
+    })
+  }
+  if (playStore.switchPlaylist) {
+    playStore.setPlayList(saveSongList.value)
+  }
   playStore.playSongById(id, true)
+}
+
+// 播放歌曲 expose method
+const playSongsAndSetPlaylist = () => {
+  if (saveSongList.value.length > 0) {
+    playStore.setPlayList(saveSongList.value)
+    playStore.playSongById(saveSongList.value[0].id, true)
+  }
 }
 
 // 加载歌曲列表
@@ -80,6 +98,9 @@ const load = async (resort: boolean | null, search: boolean | null) => {
   }
 
   const result = res.data
+  if (search && searchText.value.length == 0) {
+    saveSongList.value = result.data
+  }
 
   if (result?.data?.length) {
     songList.value.push(...result.data)
@@ -173,8 +194,10 @@ const handleAddToPlaylist = (id: number) => {
 }
 
 onMounted(async () => {
-  const response = await getSongList2Playlist()
-  playStore.setPlayList(response.data)
+  if (playStore.playList.length == 0) {
+    const response = await getSongList2Playlist()
+    playStore.setPlayList(response.data)
+  }
   await load(false, true)
 })
 
@@ -186,8 +209,10 @@ watch(
       noMore.value = false
       await load(false, true)
     },
-    { deep: true }
+    {deep: true}
 )
+
+defineExpose({playSongsAndSetPlaylist: playSongsAndSetPlaylist})
 </script>
 
 <template>

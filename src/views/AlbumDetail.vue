@@ -35,6 +35,11 @@ const fetchSongs = async () => {
   }
 }
 
+const SongListViewRef = ref()
+const handlePlayAll = () => {
+  SongListViewRef.value?.playSongsAndSetPlaylist()
+}
+
 watch(() => route.query, async (query) => {
       albumName.value = (query.albumName as string) || ''
       artistName.value = (query.artistName as string) || ''
@@ -52,6 +57,7 @@ watch(() => route.query, async (query) => {
 
 <template>
   <div class="relative flex sm:flex-row sm:items-center gap-4 p-4 shrink-0">
+    <!-- cover -->
     <img
         ref="coverRef"
         crossorigin="anonymous"
@@ -59,18 +65,32 @@ watch(() => route.query, async (query) => {
         alt=""
         class="w-36 h-36 rounded-xl shadow-md object-cover shrink-0"
     />
-    <div class="flex flex-col justify-center min-w-0 w-full">
+    <!-- text -->
+    <div class="relative flex flex-col justify-center min-w-0 w-full pt-1 pb-12">
+      <!-- header -->
       <h2 class="text-2xl sm:text-3xl font-bold text-text mb-2 truncate">
         {{ albumName }}
       </h2>
+      <!-- content -->
       <div class="text-sm text-text-light truncate">
         {{ songCount }}{{ t('song_count') }} · {{ artistName }}
       </div>
+      <!-- button -->
+      <div class="absolute bottom-0 left-0 mt-3 flex gap-2">
+        <button
+            @click="handlePlayAll"
+            class="bg-blue-300 hover:bg-blue-400 dark:bg-blue-500 dark:hover:bg-blue-600
+            text-text text-sm px-3 py-2 rounded shadow transition"
+        >
+          <span class="flex items-center gap-1">
+            <svgIcon name="play-play" class-name="w-4 h-4"/>
+            <span>{{ t('play_all_alt') }}</span>
+          </span>
+        </button>
+      </div>
     </div>
   </div>
-
-  <!-- 歌曲列表 -->
   <div class="h-full flex-1 overflow-auto">
-    <SongListView :source="source" />
+    <SongListView ref="SongListViewRef" :source="source" />
   </div>
 </template>

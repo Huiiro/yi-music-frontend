@@ -4,3 +4,8 @@
 .dark .el-dialog__title {
     color: oklch(0.946 0 89.876);
 }
+
+.dark .el-drawer {
+    background-color: oklch(21% 0.034 264.665);
+    --el-drawer-bg-color: oklch(21% 0.034 264.665);
+}
